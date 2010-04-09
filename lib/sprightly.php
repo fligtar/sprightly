@@ -77,7 +77,7 @@ class sprightly {
     }
     
     public function firefox_tweets() {
-        $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=%40firefox');
+        $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=%40firefox+OR+%23firefox');
         
         $data = new SimpleXMLElement($xml);
         $tweets = array();

@@ -63,16 +63,157 @@ body {
     background-color: #000000;
     font-family: 'Meta';
     color: #FFFFFF;
-    padding: 10px;
+    padding: 1em;
 }
 
+/* Header row */
 header h1 {
-    font-size: 30px;
+    font-size: 4em;
+    font-weight: bold;
+    float: left;
+}
+header section {
+    float: right;
+}
+#weather {
+    display: inline-block;
+    text-align: center;
+    margin-right: 2em;
+}
+#weather img {
+    display: block;
+}
+#weather span {
+    display: block;
+    margin-top: 0.2em;
+}
+#date-time {
+    display: inline-block;
+}
+#date {
+    display: block;
+    font-size: 1.5em;
+    text-align: right;
+}
+#time {
+    font-size: 3em;
+    display: block;
 }
 
-section {
+#content {
+    clear: both;
+    display: block;
+}
+
+/* Firefox */
+#firefox {
     display: inline-block;
-    background: rgba(255, 255, 255, 0.3);
-    -moz-border-radius: 6px;
-    padding: 5px;
+    border: 1px solid red;
+}
+#firefox h1 {
+    color: #D64203;
+    font-size: 4em;
+}
+#firefox .downloads .count {
+    display: block;
+    text-align: right;
+    font-size: 3em;
+}
+#firefox .downloads .label {
+    display: block;
+    text-align: right;
+    font-size: 2em;
+}
+
+#firefox .tweets li {
+    clear: left;
+}
+#firefox .tweets li img {
+    float: left;
+}
+#firefox .tweets li span {
+    display: block;
+}
+#firefox .tweets li a {
+    
+}
+#firefox .tweets li a
+
+
+/* Transportation */
+#transportation {
+    display: inline-block;
+    vertical-align: top;
+}
+#transportation h1 {
+    font-size: 2em;
+}
+#traffic {
+    display: inline-block;
+    vertical-align: top;
+}
+#traffic-map {
+    background: url(http://traffic.511.org/portalmap2.gif) no-repeat scroll -61px -143px transparent;
+    width: 293px;
+    height: 318px;
+    -moz-border-radius: 0.5em;
+}
+#traffic span {
+    font-size: 0.8em;
+    text-align: right;
+    display: block;
+}
+#caltrain {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    -moz-border-radius: 0.5em;
+    padding: 1em;
+    vertical-align: top;
+}
+#caltrain h2 {
+    text-align: center;
+}
+#caltrain h2 .logo {
+    font-style: italic;
+    font-weight: bold;
+    font-family: Arial;
+    font-size: 1.2em;
+}
+#caltrain h2 .train {
+    background-color: #C71B1B;
+    -moz-border-radius: 7em;
+    padding: 0.4em 0;
+}
+#caltrain table {
+    padding: 1em;
+}
+#caltrain th {
+    text-align: center;
+    padding: 0.5em 1em;
+    color: #CCCCCC;
+}
+#caltrain td {
+    padding: 0.2em 0.5em;
+    vertical-align: middle;
+}
+#caltrain td.time {
+    font-size: 1.2em;
+    color: #CCCCCC;
+}
+#caltrain td.type {
+    text-transform: uppercase;
+    font-size: 0.9em;
+}
+#caltrain td.type.nb {
+    border-right: 1px solid #CCCCCC;
+    padding-right: 1.5em;
+}
+#caltrain td.time.sb {
+    padding-left: 1.5em;
+}
+#caltrain .bullet {
+    color: #C71B1B;
+}
+#caltrain .limited {
+    color: #C2732B;
 }
