@@ -36,7 +36,7 @@ class sprightly {
         
         foreach ($data->countries as $country) {
             if ($country->code == '**') {
-                $total = array('total' => $country->total, 'rps' => $country->rps);
+                $total = array('total' => $country->total, 'rps' => $country->rps, 'sum' => $country->count);
                 break;
             }
         }
@@ -77,7 +77,7 @@ class sprightly {
     }
     
     public function firefox_tweets() {
-        $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=%40firefox+OR+%23firefox');
+        $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=%40firefox+OR+%23firefox+OR+firefox+OR+mozilla');
         
         $data = new SimpleXMLElement($xml);
         $tweets = array();
@@ -127,6 +127,7 @@ class sprightly {
 }
 
 $s = new sprightly;
-$s->update_data('hourly');
+$s->update_data('minutely');
 
 ?>
+<meta http-equiv="refresh" content="60">

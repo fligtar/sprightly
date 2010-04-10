@@ -108,11 +108,16 @@ header section {
 /* Firefox */
 #firefox {
     display: inline-block;
-    border: 1px solid red;
 }
 #firefox h1 {
     color: #D64203;
     font-size: 4em;
+}
+#firefox .downloads {
+    position: relative;
+}
+#firefox .downloads .total {
+    margin-bottom: 1em;
 }
 #firefox .downloads .count {
     display: block;
@@ -123,21 +128,56 @@ header section {
     display: block;
     text-align: right;
     font-size: 2em;
+    color: #CCCCCC;
 }
-
+#firefox .downloads .change span {
+    position: absolute;
+    color: green;
+    font-size: 2em;
+    right: 0.5em;
+    top: -0.7em;
+    opacity: 1;
+}
+#firefox .downloads .change span.go {
+    -moz-transition-property: top, opacity;
+    -moz-transition-duration: 5s;
+    top: -2.5em;
+    opacity: 0;
+}
+#firefox .tweets h2 {
+    color: #00D4FF;
+    font-weight: bold;
+    text-shadow: 0px 2px 1px #FFFFFF, 0px -2px 1px #FFFFFF, 2px 0px 1px #FFFFFF, -2px 0px 1px #FFFFFF;
+    font-size: 2em;
+}
 #firefox .tweets li {
     clear: left;
+    background-color: rgba(255, 255, 255, 0.1);
+    -moz-border-radius: 0.5em;
+    padding: 0.5em;
+    margin: 1em 0;
+    min-height: 48px;
 }
 #firefox .tweets li img {
     float: left;
+    margin-right: 0.4em;
+    width: 48px;
+    height: 48px;
 }
 #firefox .tweets li span {
     display: block;
+    margin-bottom: 0.4em;
+    font-size: 0.85em;
+    color: #CCCCCC;
 }
 #firefox .tweets li a {
-    
+    text-decoration: none;
+    color: #666666;
 }
-#firefox .tweets li a
+#firefox .tweets li b {
+    color: #D64203;
+    text-decoration: none;
+}
 
 
 /* Transportation */
@@ -198,7 +238,6 @@ header section {
 }
 #caltrain td.time {
     font-size: 1.2em;
-    color: #CCCCCC;
 }
 #caltrain td.type {
     text-transform: uppercase;

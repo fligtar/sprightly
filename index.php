@@ -30,6 +30,8 @@
             <h1>Firefox</h1>
             
             <div class="downloads">
+                <span class="change"></span>
+                
                 <div class="total">
                     <span class="count">3,134,124,124</span>
                     <span class="label">total downloads</span>
@@ -42,7 +44,7 @@
             </div>
         
             <div class="tweets">
-                <h2>Tweets @firefox</h2>
+                <h2>Overheard...</h2>
                 <ul>
                     <li><img src="http://a3.twimg.com/profile_images/266432199/13022009_005_-001_normal.jpg"><span>@someone</span>My <a href="#">@firefox</a> is seriously down for the count. I can't even uninstall it...lost all my bookmarks!! Grrrrr!!!</li>
                 </ul>
