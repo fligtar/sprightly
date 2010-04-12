@@ -55,15 +55,24 @@ class sprightly {
     }
     
     public function weather() {
-        $xml = $this->load_url('http://weather.yahooapis.com/forecastrss?w=12797128');
+        $weather = array();
+        $locales = array(
+            'sf' => 12797128,
+            'mv' => 2487956,
+            'sj' => 2488042
+        );
         
-        $data = new SimpleXMLElement($xml, LIBXML_NOCDATA);
+        foreach ($locales as $locale => $code) {
+            $xml = $this->load_url('http://weather.yahooapis.com/forecastrss?w='.$code);
         
-        $description = (string) $data->channel->item->description;
+            $data = new SimpleXMLElement($xml, LIBXML_NOCDATA);
         
-        preg_match('/<img src="(.+?)"\/><br \/>\s+<b>Current Conditions:<\/b><br \/>\s+(.+?)<BR \/>/', $description, $matches);
+            $description = (string) $data->channel->item->description;
         
-        $weather = array('img' => $matches[1], 'conditions' => $matches[2]);
+            preg_match('/<img src="(.+?)"\/><br \/>\s+<b>Current Conditions:<\/b><br \/>\s+(.+?)<BR \/>/', $description, $matches);
+        
+            $weather[$locale] = array('img' => $matches[1], 'conditions' => $matches[2]);
+        }
         
         return $weather;
     }
@@ -127,8 +136,4 @@ class sprightly {
     
 }
 
-$s = new sprightly;
-$s->update_data('minutely');
-
 ?>
-<meta http-equiv="refresh" content="60">

@@ -2,11 +2,12 @@ $(document).ready(function() {
     if (navigator.userAgent.indexOf('3.7') !== -1)
         sprightly.supports_transitions = true;
     
+    sprightly.refresh_five_seconds();
     sprightly.refresh_minute();
     sprightly.refresh_five_minutes();
     sprightly.refresh_hour();
     
-    window.setInterval(sprightly.refresh_second, 1000);
+    window.setInterval(sprightly.refresh_five_seconds, 5000);
     window.setInterval(sprightly.refresh_minute, 60000);
     window.setInterval(sprightly.refresh_five_minutes, 60000 * 5);
     window.setInterval(sprightly.refresh_hour, 60000 * 60);
@@ -19,19 +20,18 @@ var sprightly = {
     supports_transitions: false,
     tweet_queue: [],
     caltrain: {},
+    current_world: 0,
     
-    refresh_second: function() {
+    refresh_five_seconds: function() {
         sprightly.update_firefox_counts();
         sprightly.next_tweet();
+        sprightly.rotate_world_time();
     },
     
     refresh_minute: function() {
         sprightly.update_time();
-        
-        $('time.relative').each(function(e, t) {
-            var time = $(t);
-            time.text(date_stuff.time_ago_in_words_with_parsing(time.attr('datetime')));
-        });
+        sprightly.update_world_time();
+        sprightly.update_relative_times();
         
         $.getJSON('data/minutely.txt', function(data) {
             sprightly.update_firefox_downloads(data.firefox_downloads);
@@ -45,6 +45,8 @@ var sprightly = {
     },
     
     refresh_hour: function() {
+        sprightly.update_mfbt();
+        
         $.getJSON('data/hourly.txt', function(data) {
             sprightly.update_amo_downloads(data.amo_downloads);
             sprightly.update_weather(data.weather);
@@ -55,7 +57,43 @@ var sprightly = {
     update_time: function() {
         $('#time').text(date_stuff.get_pretty_time());
         $('#date').text(date_stuff.get_pretty_date());
-       },
+    },
+    
+    update_relative_times: function() {
+        $('time.relative').each(function(e, t) {
+            var time = $(t);
+            time.text(date_stuff.time_ago_in_words_with_parsing(time.attr('datetime')));
+        });
+    },
+    
+    update_world_time: function() {
+        $('#world-clock li time').each(function(e, t) {
+            var time = $(t);
+            time.text(date_stuff.get_pretty_time(date_stuff.world_time(time.attr('offset'))));
+        });
+    },
+    
+    rotate_world_time: function() {
+        $('#world-clock li:eq(' + sprightly.current_world + ')').fadeOut();
+        
+        if (sprightly.current_world == 4)
+            sprightly.current_world = 0;
+        else
+            sprightly.current_world++;
+        
+        $('#world-clock li:eq(' + sprightly.current_world + ')').fadeIn();
+    },
+    
+    update_mfbt: function() {
+        var currentTime = new Date();
+        var day = currentTime.getDay();
+        var hour = currentTime.getHours();
+        
+        if ((day > 0 && day < 6) && (hour < 17 && hour > 7)) 
+            $('#mfbt').hide();
+        else
+        	$('#mfbt').show();
+    },
     
     update_firefox_downloads: function(data) {
         if (sprightly.firefox36_downloads == 0)
@@ -90,6 +128,12 @@ var sprightly = {
             
             // Banned users
             if (tweet.author == 'raveranter (raveranter)') return;
+            
+            // Banned content
+            if (tweet.text.indexOf('http://ow.ly') !== -1) return;
+            
+            // Twitter highlights the OR operator. do not want
+            tweet.text = tweet.text.replace(/<b>OR<\/b>/gi, 'or');
             
             tweet.dateobj = new Date(tweet.date);
             if (tweet.dateobj > sprightly.last_tweet_date) {
@@ -201,8 +245,10 @@ var sprightly = {
     },
     
     update_weather: function(data) {
-        $('#weather img').attr('src', data.img);
-        $('#weather span').html(data.conditions.replace(' F', '&deg; F'));
+        $.each(data, function(city, weather) {
+            $('#weather-' + city + ' img').attr('src', weather.img);
+            $('#weather-' + city + ' span').html(weather.conditions.replace(', ', '<br/>').replace(' F', '&deg; F'));
+        });
     },
     
     update_amo_downloads: function(data) {
@@ -230,10 +276,12 @@ var date_stuff = {
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
             'September', 'October', 'November', 'December'],
     
-    get_pretty_time: function() {
-        var currentTime = new Date();
-        var hours = currentTime.getHours();
-        var minutes = currentTime.getMinutes();
+    get_pretty_time: function(time) {
+        if (!time)
+            time = new Date();
+        
+        var hours = time.getHours();
+        var minutes = time.getMinutes();
 
         var suffix = "AM";
         if (hours >= 12)
@@ -248,10 +296,10 @@ var date_stuff = {
     },
     
     format_hours: function(hour) {
-        if (hour == 24)
-            hour = 0;
-        else if (hour > 12)
+        if (hour > 12)
             hour = hour - 12;
+        else if (hour == 0)
+            hour = 12;
         
         return hour;
     },
@@ -291,5 +339,22 @@ var date_stuff = {
         if (distance_in_minutes < 1051199) { return 'about 1 year ago'; }
 
         return 'over ' + Math.floor(distance_in_minutes / 525960) + ' years ago';
+    },
+    
+    // mostly from http://articles.techrepublic.com.com/5100-10878_11-6016329.html
+    world_time: function(offset) {
+        // create Date object for current location
+        var d = new Date();
+
+        // convert to msec
+        // add local time zone offset
+        // get UTC time in msec
+        var utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+
+        // create new Date object for different city
+        // using supplied offset
+        var nd = new Date(utc + (3600000*offset));
+
+        return nd;
     }
 };

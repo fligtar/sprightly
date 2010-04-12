@@ -55,6 +55,12 @@ blockquote, q {
 }
 @font-face {
     font-family: 'Meta';
+    font-weight: normal;
+    font-style: italic;
+    src: url('../images/MetaWebPro-BookIta.woff') format('woff');
+}
+@font-face {
+    font-family: 'Meta';
     font-weight: bold;
     src: url('../images/MetaWebPro-Bold.woff') format('woff');
 }
@@ -65,33 +71,65 @@ body {
     color: #FFFFFF;
     padding: 1em;
     overflow: hidden;
+    line-height: 1.2;
+}
+
+#alert {
+    background-color: rgba(255, 0, 0, 0.5);
+    padding: 0.5em;
+    position: absolute;
+    top: 0;
+    width: 36%;
+    text-align: center;
+    -moz-border-radius-bottomleft: 0.5em;
+    -moz-border-radius-bottomright: 0.5em;
+    -webkit-border-bottom-left-radius: 0.5em;
+    -webkit-border-bottom-right-radius: 0.5em;
+    display: none;
 }
 
 /* Header row */
+header {
+    display: block;
+    height: 7em;
+}
 header h1 {
     font-size: 4em;
     font-weight: bold;
-    float: left;
+    background: -moz-linear-gradient(center bottom, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0.4));
+    padding: 0.1em 0.3em 0.2em;
+    position: absolute;
+    top: 0;
+    text-shadow: 2px 2px 2px #000000;
+    -moz-box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    -webkit-box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+    -moz-border-radius-bottomleft: 0.5em;
+    -moz-border-radius-bottomright: 0.5em;
+    -webkit-border-bottom-left-radius: 0.5em;
+    -webkit-border-bottom-right-radius: 0.5em;
 }
 header section {
     float: right;
+    text-align: right;
 }
-#weather {
-    display: inline-block;
-    text-align: center;
-    margin-right: 2em;
-    background-color: #FFFFFF;
-    padding: 0.2em;
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-}
-#weather span {
-    display: block;
-    margin-top: 0.2em;
-    color: #000000;
-}
+
 #date-time {
     display: inline-block;
+    line-height: 1;
+}
+#world-clock li {
+    position: absolute;
+    left: 70%;
+    top: 30px;
+    display: none;
+    text-align: center;
+}
+#world-clock li time {
+    display: block;
+    font-size: 1.2em;
+}
+#world-clock li span {
+    color: #CCCCCC;
 }
 #date {
     display: block;
@@ -102,6 +140,11 @@ header section {
     font-size: 3em;
     display: block;
 }
+#mfbt {
+    text-align: right;
+    color: #333333;
+    display: block;
+}
 
 #content {
     clear: both;
@@ -110,15 +153,26 @@ header section {
 
 /* Firefox */
 #firefox {
-    display: inline-block;
+    float: left;
     width: 40%;
 }
 #firefox h1 {
     color: #D64203;
     font-size: 4em;
+    font-weight: bold;
+    vertical-align: middle;
+    float: left;
+}
+#firefox h1 img {
+    display: inline;
+    vertical-align: middle;
+}
+#firefox h1 span {
+    margin-left: 0.3em;
 }
 #firefox .downloads {
     position: relative;
+    margin: 5em 2em 1em 0;
 }
 #firefox .downloads .total {
     margin-bottom: 1em;
@@ -151,10 +205,7 @@ header section {
     opacity: 0;
 }
 #firefox .tweets h2 {
-    color: #00D4FF;
-    font-weight: bold;
-    text-shadow: 0px 2px 1px #FFFFFF, 0px -2px 1px #FFFFFF, 2px 0px 1px #FFFFFF, -2px 0px 1px #FFFFFF;
-    font-size: 2em;
+    font-size: 1.5em;
 }
 #firefox .tweets .hidden {
     display: none;
@@ -193,18 +244,58 @@ header section {
     text-decoration: none;
 }
 
-
-/* Transportation */
-#transportation {
-    display: inline-block;
-    vertical-align: top;
+/* Features */
+#features {
+    float: right;
+    width: 59%;
+    margin-bottom: 1em;
 }
-#transportation h1 {
-    font-size: 2em;
+#rotating {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    padding: 1em;
+    vertical-align: top;
+    margin-right: 1em;
+    width: 60%;
+}
+#events {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    padding: 1em;
+    vertical-align: top;
+    margin-left: 1em;
+    width: 29%;
+}
+#events p {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 1em;
+    padding: 0.5em;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    text-align: center;
+}
+
+/* Local */
+#local {
+    float: right;
+    width: 59%;
+}
+#local h1 {
+    font-size: 1.5em;
+    margin: 0 0.5em 0.5em;
 }
 #traffic {
     display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    padding: 1em;
     vertical-align: top;
+    max-width: 27%;
 }
 #traffic-map {
     background: url(http://traffic.511.org/portalmap2.gif) no-repeat scroll -61px -143px transparent;
@@ -212,11 +303,25 @@ header section {
     height: 318px;
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
+    margin: 0.5em 0;
+}
+#traffic-map b {
+    color: red;
+    font-size: 3em;
+    left: 156px;
+    position: relative;
+    top: 206px;
 }
 #traffic span {
     font-size: 0.8em;
     text-align: right;
     display: block;
+}
+#caltrain-weather {
+    display: inline-block;
+    margin: 0 2em;
+    vertical-align: top;
+    width: 30%;
 }
 #caltrain {
     display: inline-block;
@@ -224,10 +329,7 @@ header section {
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
     padding: 1em;
-    vertical-align: top;
-}
-#caltrain h2 {
-    text-align: center;
+    width: 91%;
 }
 #caltrain h2 .logo {
     font-style: italic;
@@ -243,6 +345,8 @@ header section {
 }
 #caltrain table {
     padding: 1em;
+    margin: 0 auto;
+    width: 100%;
 }
 #caltrain th {
     text-align: center;
@@ -256,6 +360,7 @@ header section {
 #caltrain td.notrains {
     color: #CCCCCC;
     font-style: italic;
+    text-align: center;
 }
 #caltrain td.notrains.nb {
     border-right: 1px solid #CCCCCC;
@@ -284,3 +389,59 @@ header section {
 #caltrain .limited {
     color: #C2732B;
 }
+#weather {
+    display: inline-block;
+     background-color: rgba(255, 255, 255, 0.1);
+     -moz-border-radius: 0.5em;
+     -webkit-border-radius: 0.5em;
+     padding: 1em;
+     width: 91%;
+     margin-top: 2em;
+     text-align: center;
+}
+#weather div {
+    background-color: #FFFFFF;
+    padding: 0.2em;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    display: inline-block;
+    text-align: center;
+    width: 28%;
+    vertical-align: top;
+}
+#weather #weather-mv {
+    margin: 0 0.5em;
+}
+#weather div h3 {
+    color: #333333;
+    font-size: 0.8em;
+}
+#weather span {
+    display: block;
+    margin-top: 0.2em;
+    color: #333333;
+    font-size: 0.8em;
+}
+
+#pto {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.1);
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    padding: 1em;
+    vertical-align: top;
+    max-width: 30%;
+}
+#pto p {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 1em;
+    padding: 0.5em;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    text-align: center;
+}
+
+/* DEBUG 
+#firefox { background: red; }
+#features { background: green; }
+#local {background: blue; } */
