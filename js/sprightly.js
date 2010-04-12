@@ -16,7 +16,7 @@ $(document).ready(function() {
 var sprightly = {
     last_tweet_date: null,
     firefox36_downloads: 0,
-    firefox_dps: [],
+    firefox_dp5: [],
     supports_transitions: false,
     tweet_queue: [],
     caltrain: {},
@@ -99,21 +99,21 @@ var sprightly = {
         if (sprightly.firefox36_downloads == 0)
             sprightly.firefox36_downloads = data.total;
         
-        sprightly.firefox_dps = sprightly.firefox_dps.concat(data.rps);
+        sprightly.firefox_dp5 = sprightly.firefox_dp5.concat(data.dp5);
     },
     
     update_firefox_counts: function() {
-        if (sprightly.firefox_dps.length == 0)
+        if (sprightly.firefox_dp5.length == 0)
             return;
         
-        var change = sprightly.firefox_dps.shift();
+        var change = sprightly.firefox_dp5.shift();
         sprightly.firefox36_downloads += change;
         
         $('#firefox .downloads .fx36 .count').text(add_commas(sprightly.firefox36_downloads));
         $('#firefox .downloads .total .count').text(add_commas(1033197939 + sprightly.firefox36_downloads));
         
         if (sprightly.supports_transitions) {
-            $('#firefox .downloads .change').append('<span>+' + change + '</span>');
+            $('#firefox .downloads .change').append('<span>+' + add_commas(change) + '</span>');
             $('#firefox .downloads .change span').addClass('go').bind('transitionend', function(e) {
                 $(this).remove();
             });

@@ -41,6 +41,12 @@ class sprightly {
             }
         }
         
+        // We only update download counts once every 5 seconds now, so we need to split these up
+        for ($i = 0; $i < 60; $i += 5) {
+            $total['dp5'][] = $total['rps'][$i] + $total['rps'][$i + 1] + $total['rps'][$i + 2] + $total['rps'][$i + 3] + $total['rps'][$i + 4];
+        }
+        unset($total['rps']);
+        
         return $total;
     }
     
