@@ -67,7 +67,7 @@ blockquote, q {
 
 body {
     background-color: #000000;
-    font-family: 'Meta';
+    font-family: MetaBook-Roman, 'Meta';
     color: #FFFFFF;
     padding: 1em;
     overflow: hidden;
@@ -94,6 +94,7 @@ header {
 header h1 {
     font-size: 4em;
     font-weight: bold;
+    font-family: MetaBold-Roman, 'Meta';
     background: -moz-linear-gradient(center bottom, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0.4));
     padding: 0.1em 0.3em 0.2em;
     position: absolute;
@@ -158,6 +159,7 @@ header section {
     color: #D64203;
     font-size: 4em;
     font-weight: bold;
+    font-family: MetaBold-Roman, 'Meta';
     vertical-align: middle;
     float: left;
 }
@@ -233,6 +235,7 @@ header section {
 #firefox .tweets li time {
     float: right;
     font-style: italic;
+    font-family: MetaBook-Italic, 'Meta';
 }
 #firefox .tweets li a {
     text-decoration: none;
@@ -273,6 +276,7 @@ header section {
 #amo h1 span {
     color: #3A66B0;
     font-weight: bold;
+    font-family: MetaBold-Roman, 'Meta';
     font-size: 3em;
     vertical-align: middle;
     margin-left: 0.2em;
@@ -286,10 +290,12 @@ header section {
 #amo p span {
     color: #3A66B0;
     font-weight: bold;
+    font-family: MetaBold-Roman, 'Meta';
     font-size: 1.2em;
 }
 #amo p strong {
     font-weight: bold;
+    font-family: MetaBold-Roman, 'Meta';
 }
 #amo-counts {
     text-align: center;
@@ -386,6 +392,7 @@ header section {
 #caltrain h2 .logo {
     font-style: italic;
     font-weight: bold;
+    font-family: MetaBold-Italic, 'Meta';
     font-family: Arial;
     font-size: 1.2em;
 }
@@ -419,6 +426,7 @@ header section {
     color: #CCCCCC;
     font-style: italic;
     text-align: center;
+    font-family: MetaBook-Italic, 'Meta';
 }
 #caltrain td.notrains.nb {
     border-right: 2px solid rgba(255, 255, 255, 0.2);
