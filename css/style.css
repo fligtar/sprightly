@@ -64,6 +64,7 @@ body {
     font-family: 'Meta';
     color: #FFFFFF;
     padding: 1em;
+    overflow: hidden;
 }
 
 /* Header row */
@@ -82,6 +83,7 @@ header section {
     background-color: #FFFFFF;
     padding: 0.2em;
     -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
 }
 #weather span {
     display: block;
@@ -109,6 +111,7 @@ header section {
 /* Firefox */
 #firefox {
     display: inline-block;
+    width: 40%;
 }
 #firefox h1 {
     color: #D64203;
@@ -142,6 +145,8 @@ header section {
 #firefox .downloads .change span.go {
     -moz-transition-property: top, opacity;
     -moz-transition-duration: 5s;
+    -webkit-transition-property: top, opacity;
+    -webkit-transition-duration: 5s;
     top: -2.5em;
     opacity: 0;
 }
@@ -158,6 +163,7 @@ header section {
     clear: left;
     background-color: rgba(255, 255, 255, 0.1);
     -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
     padding: 0.5em;
     margin: 1em 0 0;
     min-height: 48px;
@@ -205,6 +211,7 @@ header section {
     width: 293px;
     height: 318px;
     -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
 }
 #traffic span {
     font-size: 0.8em;
@@ -215,6 +222,7 @@ header section {
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.1);
     -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
     padding: 1em;
     vertical-align: top;
 }
@@ -230,6 +238,7 @@ header section {
 #caltrain h2 .train {
     background-color: #C71B1B;
     -moz-border-radius: 7em;
+    -webkit-border-radius: 0.7em;
     padding: 0.4em 0;
 }
 #caltrain table {
@@ -244,6 +253,13 @@ header section {
     padding: 0.2em 0.5em;
     vertical-align: middle;
 }
+#caltrain td.notrains {
+    color: #CCCCCC;
+    font-style: italic;
+}
+#caltrain td.notrains.nb {
+    border-right: 1px solid #CCCCCC;
+}
 #caltrain td.time {
     font-size: 1.2em;
 }
@@ -257,6 +273,10 @@ header section {
 }
 #caltrain td.time.sb {
     padding-left: 1.5em;
+}
+#caltrain .local,
+#caltrain .saturday {
+    color: #CCCCCC;
 }
 #caltrain .bullet {
     color: #C71B1B;

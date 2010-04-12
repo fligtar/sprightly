@@ -18,6 +18,7 @@ var sprightly = {
     firefox_dps: [],
     supports_transitions: false,
     tweet_queue: [],
+    caltrain: {},
     
     refresh_second: function() {
         sprightly.update_firefox_counts();
@@ -40,7 +41,7 @@ var sprightly = {
     
     refresh_five_minutes: function() {
         sprightly.update_511();
-        sprightly.update_caltrain();
+        sprightly.filter_caltrain();
     },
     
     refresh_hour: function() {
@@ -85,7 +86,10 @@ var sprightly = {
         data.reverse();
         $.each(data, function(i, tweet) {
             // Censor bad words for the children, pets, and interns
-            tweet.text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[YAY FIREFOX!]');
+            tweet.text = tweet.text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[YAY FIREFOX!]');
+            
+            // Banned users
+            if (tweet.author == 'raveranter (raveranter)') return;
             
             tweet.dateobj = new Date(tweet.date);
             if (tweet.dateobj > sprightly.last_tweet_date) {
@@ -102,10 +106,91 @@ var sprightly = {
         var tweet = sprightly.tweet_queue.shift();
         
         $('#firefox .tweets ul').prepend('<li class="hidden"><img src="' + tweet.avatar + '" /><span class="author">' + tweet.author + '<time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time></span>' + tweet.text + '</li>').find('.hidden').slideDown();
+        
+        // Clean up everything but the last 10 tweets
+        $('#firefox .tweets ul li:gt(9)').remove();
     },
     
-    update_caltrain: function() {
+    update_caltrain: function(data) {
+        sprightly.caltrain = data;
+        sprightly.filter_caltrain();
+    },
+    
+    filter_caltrain: function() {
+        // Get the 5 next trains for each direction
+        var schedule = {
+            northbound: sprightly.compare_trains(sprightly.caltrain.northbound),
+            southbound: sprightly.compare_trains(sprightly.caltrain.southbound)
+        };
         
+        $('#caltrain tbody').empty();
+        
+        for (var i = 0; i < 5; i++) {
+            var row = '<tr>';
+            
+            // Check if there are any NB trains at all
+            if (i == 1 && schedule.northbound.length == 0) {
+                row += '<td colspan="2" class="nb notrains">No departures</td>';
+            }
+            else {
+                row += '<td class="nb time">';
+                if (schedule.northbound[i]) {
+                    row += schedule.northbound[i][0] + '</td>';
+                
+                    row += '<td class="nb type ' + schedule.northbound[i][1] + '">' + schedule.northbound[i][1];
+                }
+                else
+                    row += '</td><td class="nb type">&nbsp;';
+            
+                row += '</td>';
+            }
+            
+            // Check if there are any SB trains at all
+            if (i == 1 && schedule.southbound.length == 0) {
+                row += '<td colspan="2" class="sb notrains">No departures</td>';
+            }
+            else {
+                row += '<td class="sb time">';
+                
+                if (schedule.southbound[i]) {
+                    row += schedule.southbound[i][0] + '</td>';
+                
+                    row += '<td class="sb type ' + schedule.southbound[i][1] + '">' + schedule.southbound[i][1];
+                }
+                else
+                    row += '</td><td class="sb type">&nbsp;';
+            
+                row += '</td>';
+            }
+            
+            row += '</tr>';
+
+            $('#caltrain tbody').append(row);
+        }
+    },
+    
+    compare_trains: function(schedule) {
+        var filtered = [];
+        var currentTime = new Date();
+        var hours = currentTime.getHours();
+        var minutes = currentTime.getMinutes();
+        
+        // Get the 5 next trains
+        for (var i in schedule) {
+            if (filtered.length >= 5) break;
+            
+            var train = schedule[i];
+            var time = train[0].split(':');
+            
+            if (time[0] > hours || (time[0] == hours && time[1] >= minutes)) {
+                // Filter out Saturday-only trains on non-Saturdays
+                if (train[1] == 'saturday' && currentTime.getDay() != 6) continue;
+                
+                filtered.push([date_stuff.format_hours(time[0]) + ':' + time[1], train[1]]);
+            }
+        }
+        
+        return filtered;
     },
     
     update_511: function() {
@@ -151,18 +236,24 @@ var date_stuff = {
         var minutes = currentTime.getMinutes();
 
         var suffix = "AM";
-        if (hours >= 12) {
+        if (hours >= 12)
             suffix = "PM";
-            hours = hours - 12;
-        }
-        if (hours == 0) {
-            hours = 12;
-        }
+        
+        hours = this.format_hours(hours);
 
         if (minutes < 10)
             minutes = "0" + minutes
 
         return hours + ":" + minutes + " " + suffix;
+    },
+    
+    format_hours: function(hour) {
+        if (hour == 24)
+            hour = 0;
+        else if (hour > 12)
+            hour = hour - 12;
+        
+        return hour;
     },
     
     get_pretty_date: function() {

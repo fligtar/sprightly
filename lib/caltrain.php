@@ -51,7 +51,7 @@ $caltrain = array(
         ),
         
         'southbound' => array(
-            array('1:09', CALTRAIN_LOCAL),
+            //array('1:09', CALTRAIN_LOCAL),
             array('6:03', CALTRAIN_LOCAL),
             array('6:33', CALTRAIN_LOCAL),
             array('7:07', CALTRAIN_LIMITED),
@@ -115,7 +115,7 @@ $caltrain = array(
         ),
         
         'southbound' => array(
-            array('1:15', CALTRAIN_LOCAL_SATURDAY),
+            //array('1:15', CALTRAIN_LOCAL_SATURDAY),
             array('9:29', CALTRAIN_LOCAL),
             array('10:29', CALTRAIN_LOCAL),
             array('11:29', CALTRAIN_LOCAL),
