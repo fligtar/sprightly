@@ -64,7 +64,7 @@
         
             <div id="traffic">
                 <div id="traffic-map"></div>
-                <span>updated 5 minutes ago</span>
+                <span>updated <time datetime="" class="relative">just now</time></span>
             </div>
         
             <div id="caltrain">

@@ -79,13 +79,14 @@ header section {
     display: inline-block;
     text-align: center;
     margin-right: 2em;
-}
-#weather img {
-    display: block;
+    background-color: #FFFFFF;
+    padding: 0.2em;
+    -moz-border-radius: 0.5em;
 }
 #weather span {
     display: block;
     margin-top: 0.2em;
+    color: #000000;
 }
 #date-time {
     display: inline-block;
@@ -150,12 +151,15 @@ header section {
     text-shadow: 0px 2px 1px #FFFFFF, 0px -2px 1px #FFFFFF, 2px 0px 1px #FFFFFF, -2px 0px 1px #FFFFFF;
     font-size: 2em;
 }
+#firefox .tweets .hidden {
+    display: none;
+}
 #firefox .tweets li {
     clear: left;
     background-color: rgba(255, 255, 255, 0.1);
     -moz-border-radius: 0.5em;
     padding: 0.5em;
-    margin: 1em 0;
+    margin: 1em 0 0;
     min-height: 48px;
 }
 #firefox .tweets li img {
@@ -169,6 +173,10 @@ header section {
     margin-bottom: 0.4em;
     font-size: 0.85em;
     color: #CCCCCC;
+}
+#firefox .tweets li time {
+    float: right;
+    font-style: italic;
 }
 #firefox .tweets li a {
     text-decoration: none;
