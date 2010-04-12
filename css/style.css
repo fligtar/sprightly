@@ -261,13 +261,14 @@ header section {
     vertical-align: top;
     margin-right: 1em;
     width: 60%;
+    font-size: 0.9em;
 }
 
 #amo h1 {
     position: relative;
     left: -40px;
     top: -40px;
-    margin-bottom: -3em;
+    margin-bottom: -3.5em;
 }
 #amo h1 img {
     vertical-align: middle;
@@ -300,7 +301,7 @@ header section {
 #amo-counts {
     text-align: center;
     border-top: 1px solid #333333;
-    margin-top: 2em;
+    margin-top: 1em;
     padding: 1em 0;
 }
 #amo-counts div {
@@ -341,10 +342,6 @@ header section {
     float: right;
     width: 59%;
     margin-top: 1em;
-}
-#local h1 {
-    font-size: 1.5em;
-    margin: 0 0.5em 0.5em;
 }
 #traffic {
     display: inline-block;

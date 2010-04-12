@@ -99,8 +99,6 @@
     
         <section id="local">
             
-            <h1>Local Information</h1>
-        
             <div id="traffic">
                 <h2>Current Traffic</h2>
                 
