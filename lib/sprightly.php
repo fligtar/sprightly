@@ -8,7 +8,7 @@ class sprightly {
             'firefox_tweets'
         ),
         'hourly' => array(
-            'amo_downloads',
+            'amo',
             'weather',
             'caltrain'
         )
@@ -44,14 +44,23 @@ class sprightly {
         return $total;
     }
     
-    public function amo_downloads() {
+    public function amo() {
         // Pull yesterday's stats because today's will be zero.
         $xml = $this->load_url('https://services.addons.mozilla.org/en-US/firefox/api/1.2/stats/'.date('Y-m-d', time() - 86400));
         
         $data = new SimpleXMLElement($xml);
         
-        return (string) $data->addons->downloads;
-    
+        $amo = array(
+            'downloads' => (string) $data->addons->downloads,
+            'adu' => (string) $data->addons->updatepings,
+            'public' => (string) $data->addons->counts->public,
+            'pending' => (string) $data->addons->counts->pending,
+            'nominated' => (string) $data->addons->counts->nominated,
+            'collections' => (string) $data->collections->counts->total,
+            'collectiondownloads' => (string) $data->collections->addon_downloads
+        );
+        
+        return $amo;    
     }
     
     public function weather() {

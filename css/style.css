@@ -78,14 +78,12 @@ body {
     background-color: rgba(255, 0, 0, 0.5);
     padding: 0.5em;
     position: absolute;
-    top: 0;
-    width: 36%;
+    bottom: 2em;
+    right: 2em;
+    width: 21em;
     text-align: center;
-    -moz-border-radius-bottomleft: 0.5em;
-    -moz-border-radius-bottomright: 0.5em;
-    -webkit-border-bottom-left-radius: 0.5em;
-    -webkit-border-bottom-right-radius: 0.5em;
-    display: none;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
 }
 
 /* Header row */
@@ -169,6 +167,7 @@ header section {
 }
 #firefox h1 span {
     margin-left: 0.3em;
+    text-shadow: 1px 1px 1px #CCCCCC;
 }
 #firefox .downloads {
     position: relative;
@@ -260,6 +259,58 @@ header section {
     margin-right: 1em;
     width: 60%;
 }
+
+#amo h1 {
+    position: relative;
+    left: -40px;
+    top: -40px;
+    margin-bottom: -3em;
+}
+#amo h1 img {
+    vertical-align: middle;
+    display: inline;
+}
+#amo h1 span {
+    color: #3A66B0;
+    font-weight: bold;
+    font-size: 3em;
+    vertical-align: middle;
+    margin-left: 0.2em;
+    text-shadow: 1px 1px 1px #CCCCCC;
+}
+#amo p {
+    margin-bottom: 1em;
+    line-height: 1.5;
+    font-size: 1.2m;
+}
+#amo p span {
+    color: #3A66B0;
+    font-weight: bold;
+    font-size: 1.2em;
+}
+#amo p strong {
+    font-weight: bold;
+}
+#amo-counts {
+    text-align: center;
+    border-top: 1px solid #333333;
+    margin-top: 2em;
+    padding: 1em 0;
+}
+#amo-counts div {
+    display: inline-block;
+    text-align: center;
+    width: 45%;
+}
+#amo-counts .count {
+    display: block;
+    font-size: 2em;
+}
+#amo-counts .label {
+    color: #CCCCCC;
+    font-size: 1.2em;
+}
+
 #events {
     display: inline-block;
     background-color: rgba(255, 255, 255, 0.1);
@@ -283,6 +334,7 @@ header section {
 #local {
     float: right;
     width: 59%;
+    margin-top: 1em;
 }
 #local h1 {
     font-size: 1.5em;
@@ -350,8 +402,14 @@ header section {
 }
 #caltrain th {
     text-align: center;
-    padding: 0.5em 1em;
+    padding: 0.5em 0;
     color: #CCCCCC;
+}
+#caltrain th span {
+    background-color: rgba(255, 255, 255, 0.2);
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    padding: 0 0.5em;
 }
 #caltrain td {
     padding: 0.2em 0.5em;
@@ -363,7 +421,7 @@ header section {
     text-align: center;
 }
 #caltrain td.notrains.nb {
-    border-right: 1px solid #CCCCCC;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
 }
 #caltrain td.time {
     font-size: 1.2em;
@@ -373,7 +431,7 @@ header section {
     font-size: 0.9em;
 }
 #caltrain td.type.nb {
-    border-right: 1px solid #CCCCCC;
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
     padding-right: 1.5em;
 }
 #caltrain td.time.sb {

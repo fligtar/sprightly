@@ -48,9 +48,9 @@ var sprightly = {
         sprightly.update_mfbt();
         
         $.getJSON('data/hourly.txt', function(data) {
-            sprightly.update_amo_downloads(data.amo_downloads);
             sprightly.update_weather(data.weather);
             sprightly.update_caltrain(data.caltrain);
+            sprightly.update_amo(data.amo);
         });
     },
     
@@ -251,8 +251,10 @@ var sprightly = {
         });
     },
     
-    update_amo_downloads: function(data) {
-        
+    update_amo: function(data) {
+        for (var i in data) {
+            $('#amo #amo-' + i).text(add_commas(data[i]));
+        }
     }
     
 };
