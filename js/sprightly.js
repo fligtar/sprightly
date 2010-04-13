@@ -1,18 +1,23 @@
+// Initialize!
 $(document).ready(function() {
+    // This only works for Firefox and I... don't care.
     if (navigator.userAgent.indexOf('3.7') !== -1)
         sprightly.supports_transitions = true;
     
+    // Call refresh functions and indicate that it's their first load
     sprightly.refresh_five_seconds(true);
     sprightly.refresh_minute(true);
     sprightly.refresh_five_minutes(true);
     sprightly.refresh_hour(true);
     
+    // Set up timers to continually refresh as apporpriate
     window.setInterval(sprightly.refresh_five_seconds, 5000);
     window.setInterval(sprightly.refresh_minute, 60000);
     window.setInterval(sprightly.refresh_five_minutes, 60000 * 5);
     window.setInterval(sprightly.refresh_hour, 60000 * 60);
 });
 
+// Main sprightly object
 var sprightly = {
     last_tweet_date: null,
     firefox36_downloads: 0,
@@ -22,13 +27,16 @@ var sprightly = {
     caltrain: {},
     loadcount: 0,
     
+    // Updates loading status message
     update_status: function(msg) {
         $('#loading-message span').text(msg);
     },
     
+    // Checks if all of the initial callbacks have completed and shows content
     done_loading: function() {
         sprightly.loadcount++;
         
+        // Check if all 3 initial callbacks have completed
         if (sprightly.loadcount < 3) return;
         
         sprightly.update_status('and we\'re off!');
@@ -37,11 +45,13 @@ var sprightly = {
         });
     },
     
+    // Called every 5 seconds to refresh data
     refresh_five_seconds: function() {
         sprightly.update_firefox_counts();
         sprightly.next_tweet();
     },
     
+    // Called every minute to refresh data
     refresh_minute: function(splash) {
         sprightly.update_time();
         sprightly.update_world_time();
@@ -51,6 +61,7 @@ var sprightly = {
             sprightly.update_firefox_downloads(data.firefox_downloads);
             sprightly.update_firefox_tweets(data.firefox_tweets);
             
+            // If initial load, also prep some UI
             if (splash) {
                 sprightly.update_firefox_counts();
                 sprightly.next_tweet(true);
@@ -60,24 +71,28 @@ var sprightly = {
         });
     },
     
+    // Called every 5 minutes to refresh data
     refresh_five_minutes: function(splash) {
         sprightly.update_511();
         sprightly.filter_caltrain();
         
+        // If initial load
         if (splash) {
             sprightly.update_status('loaded transportation goodies');
             sprightly.done_loading();
         }
     },
     
+    // Called every 27 minutes to... just kidding
     refresh_hour: function(splash) {
-        sprightly.update_mfbt();
+        sprightly.update_mfbt(); // !important;
         
         $.getJSON('data/hourly.txt', function(data) {
             sprightly.update_weather(data.weather);
             sprightly.update_caltrain(data.caltrain);
             sprightly.update_amo(data.amo);
             
+            // If initial load
             if (splash) {
                 sprightly.update_status('guessed weather and additional stats');
                 sprightly.done_loading();
@@ -85,11 +100,13 @@ var sprightly = {
         });
     },
     
+    // Updates the main clock
     update_time: function() {
         $('#time').text(date_stuff.get_pretty_time());
         $('#date').text(date_stuff.get_pretty_date());
     },
     
+    // Updates all relative times
     update_relative_times: function() {
         $('time.relative').each(function(e, t) {
             var time = $(t);
@@ -97,6 +114,7 @@ var sprightly = {
         });
     },
     
+    // Updates all world clocks
     update_world_time: function() {
         $('#world-clock li time').each(function(e, t) {
             var time = $(t);
@@ -104,17 +122,19 @@ var sprightly = {
         });
     },
     
+    // Determine whether it is MFBT
     update_mfbt: function() {
         var currentTime = new Date();
         var day = currentTime.getDay();
         var hour = currentTime.getHours();
         
         if ((day > 0 && day < 6) && (hour < 17 && hour > 7)) 
-            $('#mfbt').hide();
+            $('#mfbt').hide(); // get back to work!
         else
-        	$('#mfbt').show();
+        	$('#mfbt').show(); // of course it is!
     },
     
+    // New Firefox download data has arrived. Update our array
     update_firefox_downloads: function(data) {
         if (sprightly.firefox36_downloads == 0)
             sprightly.firefox36_downloads = data.total;
@@ -122,6 +142,7 @@ var sprightly = {
         sprightly.firefox_dp5 = sprightly.firefox_dp5.concat(data.dp5);
     },
     
+    // Every 5 seconds, update the UI counts
     update_firefox_counts: function() {
         if (sprightly.firefox_dp5.length == 0)
             return;
@@ -129,9 +150,13 @@ var sprightly = {
         var change = sprightly.firefox_dp5.shift();
         sprightly.firefox36_downloads += change;
         
+        // This is pretty hacky but will be improved soon.
+        // "total downloads" ~= 3.6 downloads + a guess based on SpreadFirefox total, sorta kinda
         $('#firefox .downloads .fx36 .count').text(add_commas(sprightly.firefox36_downloads));
         $('#firefox .downloads .total .count').text(add_commas(1033197939 + sprightly.firefox36_downloads));
         
+        // On Firefox 3.7+ we use a CSS transition for a cool effect.
+        // On other browsers we don't because it's an unnecessary perf hit
         if (sprightly.supports_transitions) {
             $('#firefox .downloads .change').append('<span>+' + add_commas(change) + '</span>');
             $('#firefox .downloads .change span').addClass('go').bind('transitionend', function(e) {
@@ -140,16 +165,20 @@ var sprightly = {
         }
     },
     
+    // New tweets have arrived! Let us sort and enqueue them.
     update_firefox_tweets: function(data) {
         data.reverse();
         $.each(data, function(i, tweet) {
-            // Censor bad words for the children, pets, and interns
+            // Censor bad words for the office children, pets, and interns.
+            // Yes, I have seen every one of these words in a tweet with "Firefox" in it.
             tweet.text = tweet.text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[YAY FIREFOX!]');
             
             // Banned users
+            // This bot is super annoying
             if (tweet.author == 'raveranter (raveranter)') return;
             
             // Banned content
+            // ow.ly seems to include "Mozilla Firefox" in every tweet. wtf?
             if (tweet.text.indexOf('http://ow.ly') !== -1) return;
             
             // Twitter highlights the OR operator. do not want
@@ -157,16 +186,20 @@ var sprightly = {
             
             tweet.dateobj = new Date(tweet.date);
             if (tweet.dateobj > sprightly.last_tweet_date) {
+                // Only add the tweets that are new since last update to the UI push queue
                 sprightly.tweet_queue.push(tweet);
                 sprightly.last_tweet_date = tweet.dateobj;
             }
         });
     },
     
+    // Add the next tweet to the UI
     next_tweet: function(turbo) {
         if (sprightly.tweet_queue.length == 0)
             return;
         
+        // Normally we show one tweet every 5 seconds.
+        // If TURBO is engaged, we add them all (used for initial load)
         if (turbo)
             var num_tweets = sprightly.tweet_queue.length;
         else
@@ -182,11 +215,14 @@ var sprightly = {
         $('#firefox .tweets ul li:gt(9)').remove();
     },
     
+    // New Caltrain data has arrived. Really, this will only change once a day, but you never know
+    // when the computer was put to sleep.
     update_caltrain: function(data) {
         sprightly.caltrain = data;
         sprightly.filter_caltrain();
     },
     
+    // Based on the day's schedule and current time, update the table with the next 5 trains
     filter_caltrain: function() {
         // Get the 5 next trains for each direction
         var schedule = {
@@ -240,6 +276,7 @@ var sprightly = {
         }
     },
     
+    // Given one direction's schedule for the day, find the nearest 5 times
     compare_trains: function(schedule) {
         var filtered = [];
         var currentTime = new Date();
@@ -264,6 +301,7 @@ var sprightly = {
         return filtered;
     },
     
+    // Every 5 minutes, update traffic map with cachebusting from 511.
     update_511: function() {
         var currentTime = new Date();
         
@@ -271,6 +309,7 @@ var sprightly = {
         $('#traffic time').attr('datetime', currentTime).text(date_stuff.time_ago_in_words(currentTime));
     },
     
+    // New weather data has arrived. Update the UI
     update_weather: function(data) {
         $.each(data, function(city, weather) {
             $('#weather-' + city + ' img').attr('src', weather.img);
@@ -278,6 +317,7 @@ var sprightly = {
         });
     },
     
+    // New AMO data has arrived. Update the UI
     update_amo: function(data) {
         for (var i in data) {
             $('#amo #amo-' + i).text(add_commas(data[i]));
@@ -286,25 +326,28 @@ var sprightly = {
     
 };
 
+// Adds commas to an integer. I found this on mozilla.com somewhere!
 function add_commas(nStr) {
-  nStr += '';
+    nStr += '';
 
-  x       = nStr.split('.');
-  x1      = x[0];
-  x2      = x.length > 1 ? '.' + x[1] : '';
-  var rgx = /(\d+)(\d{3})/;
+    x       = nStr.split('.');
+    x1      = x[0];
+    x2      = x.length > 1 ? '.' + x[1] : '';
+    var rgx = /(\d+)(\d{3})/;
 
-  while (rgx.test(x1)) {
+    while (rgx.test(x1)) {
     x1 = x1.replace(rgx, '$1' + ',' + '$2');
-  }
-  return x1 + x2;
+    }
+    return x1 + x2;
 }
 
+// Date stuff goes here
 var date_stuff = {
     weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
     months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August',
             'September', 'October', 'November', 'December'],
     
+    // Optionally given a time, return the pretty time, like: 7:34 PM
     get_pretty_time: function(time) {
         if (!time)
             time = new Date();
@@ -324,6 +367,7 @@ var date_stuff = {
         return hours + ":" + minutes + " " + suffix;
     },
     
+    // Convert 24-hour time to 12-hour time
     format_hours: function(hour) {
         if (hour > 12)
             hour = hour - 12;
@@ -333,6 +377,7 @@ var date_stuff = {
         return hour;
     },
     
+    // Return the current date like: Tuesday, April 13
     get_pretty_date: function() {
         var currentTime = new Date();
         var month = this.months[currentTime.getMonth()];
@@ -342,6 +387,7 @@ var date_stuff = {
         return day + ', ' + month + ' ' + date;
     },
     
+    // These functions mostly from http://gist.github.com/58761
     time_ago_in_words_with_parsing: function(from) {
         var date = new Date;
         date.setTime(Date.parse(from));

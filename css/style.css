@@ -48,6 +48,28 @@ blockquote, q {
 
 /* End reset stylesheet */
 
+/*
+    Important font note: Our Windows XP Embedded displays at the office do not
+    support downloadable fonts for an unknown reason. Local Meta fonts should be
+    tried first (copied to all displays), and then fall back to downloadable fonts.
+    
+    normal example:
+        font-family: MetaBook-Roman, 'Meta';
+    
+    bold example:
+        font-family: MetaBold-Roman, 'Meta';
+        font-weight: bold;
+    
+    italic example:
+        font-family: MetaBook-Italic, 'Meta';
+        font-style: italic;
+    
+    bold italic example:
+        font-family: MetaBold-Italic, 'Meta';
+        font-weight: bold;
+        font-style: italic
+    
+*/
 @font-face {
     font-family: 'Meta';
     font-weight: normal;

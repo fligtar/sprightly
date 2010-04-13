@@ -1,7 +1,13 @@
 <?php
+/*
+    This is the main sprightly class, responsible for fetching data
+    from remote sources and writing to JSON files. This should probably
+    only be called from the cron scripts.
+*/
 
 class sprightly {
     
+    // Catalog of what reports get run when
     public $reports = array(
         'minutely' => array(
             'firefox_downloads',
@@ -14,6 +20,7 @@ class sprightly {
         )
     );
     
+    // Runs the given report type -- either hourly or minutely
     public function update_data($type) {
         $reports = $this->reports[$type];
         $data = array();
@@ -29,6 +36,7 @@ class sprightly {
         file_put_contents('../data/'.$type.'.txt', json_encode($data));
     }
     
+    // Gets the total Firefox 3.6 downloads
     public function firefox_downloads() {
         $json = $this->load_url('http://downloadstats.mozilla.com/data/country_report.json');
 
@@ -50,6 +58,7 @@ class sprightly {
         return $total;
     }
     
+    // Gets the previous day's AMO stats
     public function amo() {
         // Pull yesterday's stats because today's will be zero.
         $xml = $this->load_url('https://services.addons.mozilla.org/en-US/firefox/api/1.2/stats/'.date('Y-m-d', time() - 86400));
@@ -69,6 +78,7 @@ class sprightly {
         return $amo;    
     }
     
+    // Gets the current weather from Yahoo! Weather
     public function weather() {
         $weather = array();
         $locales = array(
@@ -92,6 +102,7 @@ class sprightly {
         return $weather;
     }
     
+    // Gets the day's Caltrain schedule from my manually-entered class
     public function caltrain() {
         include 'caltrain.php';
         
@@ -100,6 +111,7 @@ class sprightly {
         return $caltrain[$schedule];
     }
     
+    // Gets the latest tweets that mention firefox, #firefox, @firefox, or mozilla
     public function firefox_tweets() {
         $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=%40firefox+OR+%23firefox+OR+firefox+OR+mozilla');
         
@@ -119,14 +131,7 @@ class sprightly {
         return $tweets;
     }
     
-    public function calendar() {
-        
-    }
-    
-    public function releases() {
-        
-    }
-    
+    // curl utility function to fetch a URL and return the output
     public function load_url($url, $post = '') {
         $ch = curl_init();
 

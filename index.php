@@ -1,3 +1,11 @@
+<?php
+/*
+    This is the front-end for the ambient displays and should be loaded 
+    full-screen in the browser. All data will be refreshed automatically
+    at predetermined intervals.
+*/
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
