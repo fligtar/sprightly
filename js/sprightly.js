@@ -2,10 +2,10 @@ $(document).ready(function() {
     if (navigator.userAgent.indexOf('3.7') !== -1)
         sprightly.supports_transitions = true;
     
-    sprightly.refresh_five_seconds();
-    sprightly.refresh_minute();
-    sprightly.refresh_five_minutes();
-    sprightly.refresh_hour();
+    sprightly.refresh_five_seconds(true);
+    sprightly.refresh_minute(true);
+    sprightly.refresh_five_minutes(true);
+    sprightly.refresh_hour(true);
     
     window.setInterval(sprightly.refresh_five_seconds, 5000);
     window.setInterval(sprightly.refresh_minute, 60000);
@@ -20,15 +20,29 @@ var sprightly = {
     supports_transitions: false,
     tweet_queue: [],
     caltrain: {},
-    current_world: 0,
+    loadcount: 0,
+    
+    update_status: function(msg) {
+        $('#loading-message span').text(msg);
+    },
+    
+    done_loading: function() {
+        sprightly.loadcount++;
+        
+        if (sprightly.loadcount < 3) return;
+        
+        sprightly.update_status('and we\'re off!');
+        $('#loading-message').fadeOut('normal', function() {
+            $('#content, #clocks').fadeIn();
+        });
+    },
     
     refresh_five_seconds: function() {
         sprightly.update_firefox_counts();
         sprightly.next_tweet();
-        sprightly.rotate_world_time();
     },
     
-    refresh_minute: function() {
+    refresh_minute: function(splash) {
         sprightly.update_time();
         sprightly.update_world_time();
         sprightly.update_relative_times();
@@ -36,21 +50,38 @@ var sprightly = {
         $.getJSON('data/minutely.txt', function(data) {
             sprightly.update_firefox_downloads(data.firefox_downloads);
             sprightly.update_firefox_tweets(data.firefox_tweets);
+            
+            if (splash) {
+                sprightly.update_firefox_counts();
+                sprightly.next_tweet(true);
+                sprightly.update_status('loaded tweets & deets');
+                sprightly.done_loading();
+            }
         });
     },
     
-    refresh_five_minutes: function() {
+    refresh_five_minutes: function(splash) {
         sprightly.update_511();
         sprightly.filter_caltrain();
+        
+        if (splash) {
+            sprightly.update_status('loaded transportation goodies');
+            sprightly.done_loading();
+        }
     },
     
-    refresh_hour: function() {
+    refresh_hour: function(splash) {
         sprightly.update_mfbt();
         
         $.getJSON('data/hourly.txt', function(data) {
             sprightly.update_weather(data.weather);
             sprightly.update_caltrain(data.caltrain);
             sprightly.update_amo(data.amo);
+            
+            if (splash) {
+                sprightly.update_status('guessed weather and additional stats');
+                sprightly.done_loading();
+            }
         });
     },
     
@@ -71,17 +102,6 @@ var sprightly = {
             var time = $(t);
             time.text(date_stuff.get_pretty_time(date_stuff.world_time(time.attr('offset'))));
         });
-    },
-    
-    rotate_world_time: function() {
-        $('#world-clock li:eq(' + sprightly.current_world + ')').fadeOut();
-        
-        if (sprightly.current_world == 4)
-            sprightly.current_world = 0;
-        else
-            sprightly.current_world++;
-        
-        $('#world-clock li:eq(' + sprightly.current_world + ')').fadeIn();
     },
     
     update_mfbt: function() {
@@ -143,13 +163,20 @@ var sprightly = {
         });
     },
     
-    next_tweet: function() {
+    next_tweet: function(turbo) {
         if (sprightly.tweet_queue.length == 0)
             return;
         
-        var tweet = sprightly.tweet_queue.shift();
+        if (turbo)
+            var num_tweets = sprightly.tweet_queue.length;
+        else
+            var num_tweets = 1;
         
-        $('#firefox .tweets ul').prepend('<li class="hidden"><img src="' + tweet.avatar + '" /><span class="author">' + tweet.author + '<time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time></span>' + tweet.text + '</li>').find('.hidden').slideDown();
+        for (var i = 0; i < num_tweets; i++) {
+            var tweet = sprightly.tweet_queue.shift();
+        
+            $('#firefox .tweets ul').prepend('<li class="hidden"><img src="' + tweet.avatar + '" /><span class="author">' + tweet.author + '<time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time></span>' + tweet.text + '</li>').find('.hidden').slideDown();
+        }
         
         // Clean up everything but the last 10 tweets
         $('#firefox .tweets ul li:gt(9)').remove();

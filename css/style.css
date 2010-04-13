@@ -115,12 +115,15 @@ header section {
 #date-time {
     display: inline-block;
     line-height: 1;
+    width: 14em;
+}
+#world-clock {
+    float: left;
+    margin: 0.5em 16em 0 0;
 }
 #world-clock li {
-    position: absolute;
-    left: 70%;
-    top: 30px;
-    display: none;
+    display: inline-block;
+    margin: 0 2em;
     text-align: center;
 }
 #world-clock li time {
@@ -143,18 +146,32 @@ header section {
     text-align: right;
     color: #333333;
     display: block;
+    margin-top: 0.2em;
 }
 
+/* Content */
 #content {
     clear: both;
-    display: block;
+    display: table-row;
+}
+#left {
+    display: table-cell;
+    width: 40%;
+    vertical-align: top;
+}
+#middle {
+    display: table-cell;
+    width: 40%;
+    padding: 0 2em;
+    vertical-align: top;
+}
+#right {
+    display: table-cell;
+    width: 20%;
+    vertical-align: top;
 }
 
-/* Firefox */
-#firefox {
-    float: left;
-    width: 40%;
-}
+/* Left Column */
 #firefox h1 {
     color: #D64203;
     font-size: 4em;
@@ -162,6 +179,7 @@ header section {
     font-family: MetaBold-Roman, 'Meta';
     vertical-align: middle;
     float: left;
+    margin-top: -0.5em;
 }
 #firefox h1 img {
     display: inline;
@@ -173,7 +191,7 @@ header section {
 }
 #firefox .downloads {
     position: relative;
-    margin: 5em 2em 1em 0;
+    margin: 2em 2em 1em 0;
 }
 #firefox .downloads .total {
     margin-bottom: 1em;
@@ -195,15 +213,14 @@ header section {
     font-size: 2em;
     right: 0.5em;
     top: -0.7em;
-    opacity: 1;
 }
 #firefox .downloads .change span.go {
-    -moz-transition-property: top, opacity;
+    -moz-transition-property: top, color;
     -moz-transition-duration: 5s;
-    -webkit-transition-property: top, opacity;
+    -webkit-transition-property: top, color;
     -webkit-transition-duration: 5s;
     top: -2.5em;
-    opacity: 0;
+    color: #000000;
 }
 #firefox .tweets h2 {
     font-size: 1.5em;
@@ -246,21 +263,36 @@ header section {
     text-decoration: none;
 }
 
-/* Features */
-#features {
-    float: right;
-    width: 59%;
-    margin-bottom: 1em;
-}
+/* Middle */
 #rotating {
-    display: inline-block;
+    margin-bottom: 2em;
+    height: 29em;
+}
+#rotating .featured {
+    background-color: rgba(255, 255, 255, 0.3);
+    display: block;
+    float: right;
+    margin-right: 2em;
+    padding: 0.2em 0.5em;
+    -moz-border-radius-bottomleft: 0.5em;
+    -moz-border-radius-bottomright: 0.5em;
+    -webkit-border-bottom-left-radius: 0.5em;
+    -webkit-border-bottom-right-radius: 0.5em;
+    text-shadow: 1px 1px 1px #000000;
+}
+#rotating .next {
+    color: #CCCCCC;
+    display: block;
+    font-size: 0.8em;
+    text-align: center;
+    text-shadow: none;
+}
+#rotating > div {
     background-color: rgba(255, 255, 255, 0.1);
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
     padding: 1em;
     vertical-align: top;
-    margin-right: 1em;
-    width: 60%;
     font-size: 0.9em;
 }
 
@@ -318,39 +350,20 @@ header section {
     font-size: 1.2em;
 }
 
-#events {
-    display: inline-block;
-    background-color: rgba(255, 255, 255, 0.1);
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-    padding: 1em;
-    vertical-align: top;
-    margin-left: 1em;
-    width: 29%;
-}
-#events p {
-    background-color: rgba(255, 255, 255, 0.2);
-    margin: 1em;
-    padding: 0.5em;
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-    text-align: center;
-}
-
-/* Local */
 #local {
-    float: right;
-    width: 59%;
-    margin-top: 1em;
+    display: table-row;
+    margin-top: 2em;
 }
 #traffic {
-    display: inline-block;
     background-color: rgba(255, 255, 255, 0.1);
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
     padding: 1em;
     vertical-align: top;
-    max-width: 27%;
+    display: table-cell;
+}
+#traffic h2 {
+    margin-bottom: 1em;
 }
 #traffic-map {
     background: url(http://traffic.511.org/portalmap2.gif) no-repeat scroll -61px -143px transparent;
@@ -373,18 +386,16 @@ header section {
     display: block;
 }
 #caltrain-weather {
-    display: inline-block;
-    margin: 0 2em;
+    display: table-cell;
     vertical-align: top;
-    width: 30%;
+    padding-left: 2em;
 }
 #caltrain {
-    display: inline-block;
     background-color: rgba(255, 255, 255, 0.1);
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
     padding: 1em;
-    width: 91%;
+    margin-bottom: 2em;
 }
 #caltrain h2 .logo {
     font-style: italic;
@@ -453,14 +464,11 @@ header section {
     color: #C2732B;
 }
 #weather {
-    display: inline-block;
-     background-color: rgba(255, 255, 255, 0.1);
-     -moz-border-radius: 0.5em;
-     -webkit-border-radius: 0.5em;
-     padding: 1em;
-     width: 91%;
-     margin-top: 2em;
-     text-align: center;
+    background-color: rgba(255, 255, 255, 0.1);
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    padding: 1em;
+    text-align: center;
 }
 #weather div {
     background-color: #FFFFFF;
@@ -469,8 +477,8 @@ header section {
     -webkit-border-radius: 0.5em;
     display: inline-block;
     text-align: center;
-    width: 28%;
     vertical-align: top;
+    width: 28%;
 }
 #weather #weather-mv {
     margin: 0 0.5em;
@@ -486,14 +494,32 @@ header section {
     font-size: 0.8em;
 }
 
-#pto {
-    display: inline-block;
+/* Right */
+#events {
     background-color: rgba(255, 255, 255, 0.1);
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
     padding: 1em;
     vertical-align: top;
-    max-width: 30%;
+    height: 27em;
+    margin-bottom: 2em;
+}
+#events p {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 1em;
+    padding: 0.5em;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    text-align: center;
+    font-size: 0.9em;
+    color: #CCCCCC;
+}
+#pto {
+    background-color: rgba(255, 255, 255, 0.1);
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    padding: 1em;
+    vertical-align: top;
 }
 #pto p {
     background-color: rgba(255, 255, 255, 0.2);
@@ -502,9 +528,45 @@ header section {
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
     text-align: center;
+    font-size: 0.9em;
+    color: #CCCCCC;
 }
 
-/* DEBUG 
-#firefox { background: red; }
-#features { background: green; }
-#local {background: blue; } */
+/* Loading */
+#content,
+#clocks {
+    display: none;
+}
+#loading-message {
+    display: block;
+    text-align: center;
+    margin-top: 10em;
+}
+#loading-message div {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #CCCCCC;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    display: inline-block;
+    padding: 1em;
+}
+#loading-message p {
+    font-size: 2em;
+}
+#loading-message span {
+    color: #CCCCCC;
+    display: block;
+    margin-top: 0.5em;
+}
+
+#debug {
+    position: absolute;
+    z-index: 0;
+    top: 0;
+    left: 0;
+    width: 1920px;
+    height: 1080px;
+    border-bottom: 1px solid red;
+    border-right: 1px solid red;
+    display: none;
+}
