@@ -13,6 +13,9 @@ class sprightly {
             'firefox_downloads',
             'firefox_tweets'
         ),
+        '5minutely' => array(
+            'traffic'
+        ),
         'hourly' => array(
             'amo',
             'weather',
@@ -33,7 +36,7 @@ class sprightly {
         
         print_r($data);
         
-        file_put_contents('../data/'.$type.'.txt', json_encode($data));
+        file_put_contents(dirname(dirname(__FILE__)).'/data/'.$type.'.txt', json_encode($data));
     }
     
     // Gets the total Firefox 3.6 downloads
@@ -104,7 +107,7 @@ class sprightly {
     
     // Gets the day's Caltrain schedule from my manually-entered class
     public function caltrain() {
-        include 'caltrain.php';
+        include dirname(__FILE__).'/caltrain.php';
         
         $schedule = date('N') >= 6 ? 'weekends' : 'weekdays';
         
@@ -129,6 +132,13 @@ class sprightly {
         }
         
         return $tweets;
+    }
+    
+    // Retrieves the live traffic image from 511 and saves it
+    public function traffic() {
+        $image = $this->load_url('http://traffic.511.org/portalmap2.gif?'.time());
+        
+        file_put_contents(dirname(dirname(__FILE__)).'/data/traffic.gif', $image);
     }
     
     // curl utility function to fetch a URL and return the output

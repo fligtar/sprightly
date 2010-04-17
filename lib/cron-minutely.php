@@ -4,7 +4,7 @@
     via crontab or by loading the page in a browser.
 */
 
-require 'sprightly.php';
+require dirname(__FILE__).'/sprightly.php';
 
 $s = new sprightly;
 $s->update_data('minutely');

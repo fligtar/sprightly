@@ -394,7 +394,7 @@ header h1 {
     margin-bottom: 1em;
 }
 #traffic-map {
-    background: url(http://traffic.511.org/portalmap2.gif) no-repeat scroll -61px -143px transparent;
+    background: url(../data/traffic.gif) no-repeat scroll -61px -143px transparent;
     width: 293px;
     height: 318px;
     -moz-border-radius: 0.5em;

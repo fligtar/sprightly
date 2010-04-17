@@ -318,7 +318,7 @@ var sprightly = {
     update_511: function() {
         var currentTime = new Date();
         
-        $('#traffic-map').css('background-image', 'http://traffic.511.org/portalmap2.gif?' + currentTime.getTime());
+        $('#traffic-map').css('background-image', 'data/traffic.gif?' + currentTime.getTime());
         $('#traffic time').attr('datetime', currentTime).text(date_stuff.time_ago_in_words(currentTime));
     },
     
