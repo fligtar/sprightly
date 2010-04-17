@@ -1,0 +1,13 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Office redirect
+    # Example: /mv -> index.php?office=mv
+    RewriteRule ^(mv|toronto)$ index.php?office=$1 [L]
+
+    # 404
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^([^\/]+)\/?(.*)$ index.php
+    
+</IfModule>

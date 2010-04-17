@@ -91,7 +91,7 @@ body {
     background-color: #000000;
     font-family: MetaBook-Roman, 'Meta';
     color: #FFFFFF;
-    padding: 1em;
+    padding: 0 1em 1em 1em;
     overflow: hidden;
     line-height: 1.2;
 }
@@ -110,17 +110,27 @@ body {
 
 /* Header row */
 header {
-    display: block;
+    display: table;
     height: 7em;
+    width: 100%;
 }
+header > div {
+    display: table-row;
+}
+#title,
+#world-clock,
+#date-time {
+    display: table-cell;
+    vertical-align: top;
+}
+
 header h1 {
     font-size: 4em;
     font-weight: bold;
     font-family: MetaBold-Roman, 'Meta';
     background: -moz-linear-gradient(center bottom, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0.4));
     padding: 0.1em 0.3em 0.2em;
-    position: absolute;
-    top: 0;
+    text-align: center;
     text-shadow: 2px 2px 2px #000000;
     -moz-box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
     -webkit-box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
@@ -128,20 +138,11 @@ header h1 {
     -moz-border-radius-bottomright: 0.5em;
     -webkit-border-bottom-left-radius: 0.5em;
     -webkit-border-bottom-right-radius: 0.5em;
-}
-header section {
-    float: right;
-    text-align: right;
-}
-
-#date-time {
-    display: inline-block;
-    line-height: 1;
-    width: 14em;
+    width: 3.3em;
 }
 #world-clock {
-    float: left;
-    margin: 0.5em 16em 0 0;
+    padding-top: 1.5em;
+    text-align: center;
 }
 #world-clock li {
     display: inline-block;
@@ -154,6 +155,11 @@ header section {
 }
 #world-clock li span {
     color: #CCCCCC;
+}
+#date-time {
+    line-height: 1;
+    text-align: right;
+    padding-top: 0.5em;
 }
 #date {
     display: block;
@@ -591,4 +597,19 @@ header section {
     border-bottom: 1px solid red;
     border-right: 1px solid red;
     display: none;
+}
+
+/* I'll deal with this later!
+@media all and (max-width: 800px) {
+    body {
+        font-size: 0.5em;
+    }
+}*/
+
+/* Office-specific */
+body.mv .hide-mv {
+    display: none !important;
+}
+body.toronto .hide-toronto {
+    display: none !important;
 }

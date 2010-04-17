@@ -1,24 +1,14 @@
-// Initialize!
 $(document).ready(function() {
-    // This only works for Firefox and I... don't care.
-    if (navigator.userAgent.indexOf('3.7') !== -1)
-        sprightly.supports_transitions = true;
-    
-    // Call refresh functions and indicate that it's their first load
-    sprightly.refresh_five_seconds(true);
-    sprightly.refresh_minute(true);
-    sprightly.refresh_five_minutes(true);
-    sprightly.refresh_hour(true);
-    
-    // Set up timers to continually refresh as apporpriate
-    window.setInterval(sprightly.refresh_five_seconds, 5000);
-    window.setInterval(sprightly.refresh_minute, 60000);
-    window.setInterval(sprightly.refresh_five_minutes, 60000 * 5);
-    window.setInterval(sprightly.refresh_hour, 60000 * 60);
+    sprightly.initialize();
 });
 
 // Main sprightly object
 var sprightly = {
+    offices: {
+        'mv': 'Mountain View',
+        'toronto': 'Toronto'
+    },
+    office: 'mv',
     last_tweet_date: null,
     firefox36_downloads: 0,
     firefox_dp5: [],
@@ -26,6 +16,27 @@ var sprightly = {
     tweet_queue: [],
     caltrain: {},
     loadcount: 0,
+    
+    // Initialize!
+    initialize: function() {
+        sprightly.office = $('body').attr('data-office');
+        
+        // This only works for Firefox and I... don't care.
+        if (navigator.userAgent.indexOf('3.7') !== -1)
+            sprightly.supports_transitions = true;
+
+        // Call refresh functions and indicate that it's their first load
+        sprightly.refresh_five_seconds(true);
+        sprightly.refresh_minute(true);
+        sprightly.refresh_five_minutes(true);
+        sprightly.refresh_hour(true);
+
+        // Set up timers to continually refresh as apporpriate
+        window.setInterval(sprightly.refresh_five_seconds, 5000);
+        window.setInterval(sprightly.refresh_minute, 60000);
+        window.setInterval(sprightly.refresh_five_minutes, 60000 * 5);
+        window.setInterval(sprightly.refresh_hour, 60000 * 60);
+    },
     
     // Updates loading status message
     update_status: function(msg) {
@@ -38,6 +49,8 @@ var sprightly = {
         
         // Check if all 3 initial callbacks have completed
         if (sprightly.loadcount < 3) return;
+        
+        $('title').text('Mozilla ' + sprightly.offices[sprightly.office]);
         
         sprightly.update_status('and we\'re off!');
         $('#loading-message').fadeOut('normal', function() {
@@ -118,7 +131,7 @@ var sprightly = {
     update_world_time: function() {
         $('#world-clock li time').each(function(e, t) {
             var time = $(t);
-            time.text(date_stuff.get_pretty_time(date_stuff.world_time(time.attr('offset'))));
+            time.text(date_stuff.get_pretty_time(date_stuff.world_time(time.attr('data-offset'))));
         });
     },
     

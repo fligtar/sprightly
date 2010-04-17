@@ -4,6 +4,11 @@
     full-screen in the browser. All data will be refreshed automatically
     at predetermined intervals.
 */
+
+$offices = array('mv', 'toronto');
+
+$office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET['office'] : $offices[0];
+
 ?>
 
 <!DOCTYPE html>
@@ -12,30 +17,34 @@
 <head>
     <title>sprightly</title>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <link rel="shortcut icon" type="image/png" href="images/favicon.ico" />
 </head>
 
-<body>
+<body class="<?php echo $office; ?>" data-office="<?php echo $office; ?>">
     <div id="debug"></div>
     <header>
-        <h1>mozilla</h1>
+        <div>
+            <div id="title">
+                <h1>mozilla</h1>
+            </div>
         
-        <section id="clocks">
             <div id="world-clock">
                 <ul>
-                    <li><time offset="-4"></time><span>Toronto, Canada</span></li>
-                    <li><time offset="+2"></time><span>Paris, France</span></li>
-                    <li><time offset="+8"></time><span>Beijing, China</span></li>
-                    <li><time offset="+9"></time><span>Tokyo, Japan</span></li>
-                    <li><time offset="+12"></time><span>Auckland, New Zealand</span></li>
+                    <li class="hide-mv"><time data-offset="-7"></time><span>Mountain View</span</li>
+                    <li class="hide-toronto"><time data-offset="-4"></time><span>Toronto</span></li>
+                    <li><time data-offset="+2"></time><span>Paris</span></li>
+                    <li><time data-offset="+8"></time><span>Beijing</span></li>
+                    <li><time data-offset="+9"></time><span>Tokyo</span></li>
+                    <li><time data-offset="+12"></time><span>Auckland</span></li>
                 </ul>
             </div>
-            
+        
             <div id="date-time">
                 <span id="date"></span>
                 <span id="time"></span>
                 <span id="mfbt">(possibly MFBT)</span>
             </div>
-        </section>
+        </div>
     </header>
     
     <section id="loading-message">
@@ -111,7 +120,7 @@
             
             <div id="local">
                 
-                <div id="traffic">
+                <div id="traffic" class="hide-toronto">
                     <h2>Current Traffic</h2>
                 
                     <div id="traffic-map"><b>&middot;</b></div>
@@ -120,7 +129,7 @@
             
                 <div id="caltrain-weather">
                 
-                    <div id="caltrain">
+                    <div id="caltrain" class="hide-toronto">
                         <h2>Mountain View <span class="logo">Cal<span class="train">train</span></span></h2>
                 
                         <table>
