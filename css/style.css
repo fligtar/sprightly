@@ -297,7 +297,7 @@ header h1 {
     height: 29em;
 }
 #rotating .featured {
-    background-color: rgba(255, 255, 255, 0.3);
+    background-color: rgba(255, 255, 255, 0.2);
     display: block;
     float: right;
     margin-right: 2em;
@@ -446,13 +446,14 @@ header h1 {
 #caltrain th {
     text-align: center;
     padding: 0.5em 0;
-    color: #CCCCCC;
+    color: #FFFFFF;
 }
 #caltrain th span {
     background-color: rgba(255, 255, 255, 0.2);
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
-    padding: 0 0.5em;
+    padding: 0.2em 0.5em;
+    text-shadow: 1px 1px 1px #000000;
 }
 #caltrain td {
     padding: 0.2em 0.5em;
@@ -532,6 +533,25 @@ header h1 {
     height: 27em;
     margin-bottom: 2em;
 }
+#events dt {
+    margin: 1em 0 0.5em;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.2em 0.5em;
+    text-shadow: 1px 1px 1px #000000;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+}
+#events dt.today {
+    -moz-box-shadow: 0 0 10px #FFFFFF;
+    -webkit-box-shadow: 0 0 10px #FFFFFF;
+}
+#events dd {
+    margin: 0.5em 0 0.5em 1em;
+}
+#events dd time {
+    margin-right: 1em;
+    color: #CCCCCC;
+}
 #events p {
     background-color: rgba(255, 255, 255, 0.2);
     margin: 1em;
@@ -541,7 +561,9 @@ header h1 {
     text-align: center;
     font-size: 0.9em;
     color: #CCCCCC;
+    display: none;
 }
+
 #pto {
     background-color: rgba(255, 255, 255, 0.1);
     -moz-border-radius: 0.5em;

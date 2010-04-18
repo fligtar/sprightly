@@ -2,6 +2,11 @@ Sprightly is an ambient display dashboard/system, mainly for Mozilla. Here's how
 
 * lib/sprightly.php is the PHP class that does all the data fetching from remote sources and writes them to json files in /data.
 
-* lib/cron-hourly.php and lib/cron-minutely.php should be run at the indicated intervals to call the appropriate sprightly functions to refresh data. These scripts can either be set up as crontabs or loaded in a browser and will automatically refresh at the appropriate intervals (useful for local development, though a .htaccess file should probably be added to prevent direct access in production)
+* lib/cron-*.php should be run at the indicated intervals to call the appropriate sprightly functions to refresh data. These scripts can either be set up as crontabs or loaded in a browser and will automatically refresh at the appropriate intervals (useful for local development, though a .htaccess file should probably be added to prevent direct access in production)
+
+Sample cron setup:
+* * * * * /usr/local/php5/bin/php -f /home/fligtar/sprightly.fligtar.com/lib/cron-minutely.php
+*/5 * * * * /usr/local/php5/bin/php -f /home/fligtar/sprightly.fligtar.com/lib/cron-5minutely.php
+0 * * * * /usr/local/php5/bin/php -f /home/fligtar/sprightly.fligtar.com/lib/cron-hourly.php
 
 * index.php is what should be loaded on the ambient displays. The page is loaded once and the data is refreshed in the background by reading from the json files written in /data. (This way, no matter how many displays are set up, remote data sources are only hit once by the sprightly script and all displays are kinda in sync)

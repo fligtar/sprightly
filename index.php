@@ -174,9 +174,12 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         <section id="right">
             
             <div id="events">
-                <h2>Today's Events</h2>
+                <h2>Upcoming Events</h2>
                 
-                <p>This will list today's events or some other calendar-like thing.</p>
+                <dl>
+                </dl>
+                
+                <p>No upcoming events</p>
             </div>
             
             <div id="pto">

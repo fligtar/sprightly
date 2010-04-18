@@ -104,6 +104,7 @@ var sprightly = {
             sprightly.update_weather(data.weather);
             sprightly.update_caltrain(data.caltrain);
             sprightly.update_amo(data.amo);
+            sprightly.update_calendar(data.calendar);
             
             // If initial load
             if (splash) {
@@ -335,6 +336,36 @@ var sprightly = {
         for (var i in data) {
             $('#amo #amo-' + i).text(add_commas(data[i]));
         }
+    },
+    
+    // Updates calendar with new events
+    update_calendar: function(events) {
+        if (events.length == 0)
+            $('#events p').show();
+        else
+            $('#events p').hide();
+        
+        $('#events dl').empty();
+        
+        var lastdate = '';
+        
+        $.each(events, function(i, event) {
+            var time = new Date(event.start);
+            var prettydate = date_stuff.get_pretty_date(time);
+            
+            if (lastdate != prettydate) {
+                if (lastdate == '' && prettydate == date_stuff.get_pretty_date())
+                    var extra = ' class="today"';
+                else
+                    var extra = '';
+                
+                $('#events dl').append('<dt' + extra + '>' + prettydate + '</dt>');
+                lastdate = prettydate;
+            }
+            
+            $('#events dl').append('<dd><time>' + date_stuff.get_pretty_time(time) + '</time>' + event.name + '</dd>');
+        }); 
+        
     }
     
 };
@@ -390,12 +421,14 @@ var date_stuff = {
         return hour;
     },
     
-    // Return the current date like: Tuesday, April 13
-    get_pretty_date: function() {
-        var currentTime = new Date();
-        var month = this.months[currentTime.getMonth()];
-        var day = this.weekdays[currentTime.getDay()];
-        var date = currentTime.getDate();
+    // Optionally given a time, return the pretty date, like: Tuesday, April 13
+    get_pretty_date: function(time) {
+        if (!time)
+            time = new Date();
+
+        var month = this.months[time.getMonth()];
+        var day = this.weekdays[time.getDay()];
+        var date = time.getDate();
     
         return day + ', ' + month + ' ' + date;
     },

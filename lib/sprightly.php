@@ -8,7 +8,7 @@
 class sprightly {
     
     // Catalog of what reports get run when
-    public $reports = array(
+    private $reports = array(
         'minutely' => array(
             'firefox_downloads',
             'firefox_tweets'
@@ -19,7 +19,8 @@ class sprightly {
         'hourly' => array(
             'amo',
             'weather',
-            'caltrain'
+            'caltrain',
+            'calendar'
         )
     );
     
@@ -40,7 +41,7 @@ class sprightly {
     }
     
     // Gets the total Firefox 3.6 downloads
-    public function firefox_downloads() {
+    private function firefox_downloads() {
         $json = $this->load_url('http://downloadstats.mozilla.com/data/country_report.json');
 
         $data = json_decode($json);
@@ -62,7 +63,7 @@ class sprightly {
     }
     
     // Gets the previous day's AMO stats
-    public function amo() {
+    private function amo() {
         // Pull yesterday's stats because today's will be zero.
         $xml = $this->load_url('https://services.addons.mozilla.org/en-US/firefox/api/1.2/stats/'.date('Y-m-d', time() - 86400));
         
@@ -82,7 +83,7 @@ class sprightly {
     }
     
     // Gets the current weather from Yahoo! Weather
-    public function weather() {
+    private function weather() {
         $weather = array();
         $locales = array(
             'sf' => 12797128,
@@ -106,7 +107,7 @@ class sprightly {
     }
     
     // Gets the day's Caltrain schedule from my manually-entered class
-    public function caltrain() {
+    private function caltrain() {
         include dirname(__FILE__).'/caltrain.php';
         
         $schedule = date('N') >= 6 ? 'weekends' : 'weekdays';
@@ -115,7 +116,7 @@ class sprightly {
     }
     
     // Gets the latest tweets that mention firefox, #firefox, @firefox, or mozilla
-    public function firefox_tweets() {
+    private function firefox_tweets() {
         $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=%40firefox+OR+%23firefox+OR+firefox+OR+mozilla');
         
         $data = new SimpleXMLElement($xml);
@@ -135,14 +136,95 @@ class sprightly {
     }
     
     // Retrieves the live traffic image from 511 and saves it
-    public function traffic() {
+    private function traffic() {
         $image = $this->load_url('http://traffic.511.org/portalmap2.gif?'.time());
         
         file_put_contents(dirname(dirname(__FILE__)).'/data/traffic.gif', $image);
     }
     
+    // Gets upcoming events from the calendar
+    private function calendar() {
+        require dirname(__FILE__).'/ical.php';
+        
+        $ics = dirname(dirname(__FILE__)).'/data/calendar.ics';
+        
+        if (!file_exists($ics)) return false;
+        
+        $cal = new iCalReader($ics);
+
+        $events = $cal->getEvents();
+        $events = $this->filter_events($events);
+        $events = $this->add_events($events);
+        
+        usort($events, array('sprightly', 'sort_events'));
+        
+        return $events;
+    }
+    
+    // Filter events down to those this week
+    private function filter_events($events) {
+        $filtered = array();
+        
+        // Look for events that start or end during the week or contain days in the week
+        foreach ($events as $event) {
+            // Find start and end times
+            if (!empty($event['DTSTART;TZID="America/Los_Angeles"']))
+                $start = strtotime($event['DTSTART;TZID="America/Los_Angeles"']);
+            if (!empty($event['DTEND;TZID="America/Los_Angeles"']))
+                $end = strtotime($event['DTEND;TZID="America/Los_Angeles"']);
+            if (!empty($event['DTSTART;VALUE=DATE']))
+                $start = strtotime($event['DTSTART;VALUE=DATE']);
+            if (!empty($event['DTEND;VALUE=DATE']))
+                $end = strtotime($event['DTEND;VALUE=DATE']);
+            
+            // Find start and end times for week
+            $weekstart = strtotime('today');
+            $weekend = strtotime('+6 days');
+            
+            $include = false;
+            // Event ends this week
+            if ($end <= $weekstart && $end >= $weekend)
+                $include = true;
+            // Event starts this week
+            if ($start >= $weekstart && $start <= $weekend)
+                $include = true;
+            // Event contains this week
+            if ($start < $weekstart && $end > $weekend)
+                $include = true;
+            
+            if ($include == true) {
+                $filtered[] = array(
+                    'name' => $event['SUMMARY'],
+                    'start' => date('Y-m-d\TH:i:sP', $start),
+                    'end' => date('Y-m-d\TH:i:sP', $end)
+                );
+            }
+        }
+        
+        return $filtered;
+    }
+    
+    // Rather than deal with supporting recurring events, for now just add them manually
+    function add_events($events) {
+        $events[] = array(
+            'name' => 'Weekly Project Meeting',
+            'start' => date('Y-m-d\TH:i:sP', strtotime('monday 11:00 America/Los_Angeles')),
+            'end' => date('Y-m-d\TH:i:sP', strtotime('monday 12:00 America/Los_Angeles'))
+        );
+        
+        return $events;
+    }
+    
+    // Custom comparison function for sorting events
+    static function sort_events($a, $b) {
+        if ($a['start'] == $b['start'])
+            return 0;
+        
+        return ($a['start'] < $b['start']) ? -1 : 1;
+    }
+    
     // curl utility function to fetch a URL and return the output
-    public function load_url($url, $post = '') {
+    private function load_url($url, $post = '') {
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
