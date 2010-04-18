@@ -127,6 +127,8 @@ class sprightly {
             $tweets[] = array(
                 'text' => (string) $item->content,
                 'author' => (string) $item->author->name,
+                'author_url' => (string) $item->author->uri,
+                'url' => (string) $item->link[0]->attributes()->href,
                 'avatar' => (string) $item->link[1]->attributes()->href,
                 'date' => (string) $item->published
             );

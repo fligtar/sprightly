@@ -25,17 +25,17 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
     <header>
         <div>
             <div id="title">
-                <h1>mozilla</h1>
+                <h1><span>mozilla</span></h1>
             </div>
         
             <div id="world-clock">
                 <ul>
-                    <li class="hide-mv"><time data-offset="-7"></time><span>Mountain View</span</li>
-                    <li class="hide-toronto"><time data-offset="-4"></time><span>Toronto</span></li>
-                    <li><time data-offset="+2"></time><span>Paris</span></li>
-                    <li><time data-offset="+8"></time><span>Beijing</span></li>
-                    <li><time data-offset="+9"></time><span>Tokyo</span></li>
-                    <li><time data-offset="+12"></time><span>Auckland</span></li>
+                    <li class="hide-mv"><span>Mountain View</span><time data-offset="-7"></time></li>
+                    <li class="hide-toronto"><span>Toronto</span><time data-offset="-4"></time></li>
+                    <li><span>Paris</span><time data-offset="+2"></time></li>
+                    <li><span>Beijing</span><time data-offset="+8"></time></li>
+                    <li><span>Tokyo</span><time data-offset="+9"></time></li>
+                    <li><span>Auckland</span><time data-offset="+12"></time></li>
                 </ul>
             </div>
         
@@ -90,7 +90,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             <div id="rotating">
                 <span class="featured">Featured Projects<span class="next">next: Support</span></span>
                 
-                <div id="amo">
+                <div id="amo" class="box">
                     
                     <h1><img src="images/addons.png"/><span>Add-ons</span></h1>
                     
@@ -120,7 +120,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             
             <div id="local">
                 
-                <div id="traffic" class="hide-toronto">
+                <div id="traffic" class="box hide-toronto">
                     <h2>Current Traffic</h2>
                 
                     <div id="traffic-map"><b>&middot;</b></div>
@@ -129,7 +129,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             
                 <div id="caltrain-weather">
                 
-                    <div id="caltrain" class="hide-toronto">
+                    <div id="caltrain" class="box hide-toronto">
                         <h2>Mountain View <span class="logo">Cal<span class="train">train</span></span></h2>
                 
                         <table>
@@ -145,7 +145,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                         </table>
                     </div>
                     
-                    <div id="weather">
+                    <div id="weather" class="box">
                         <div id="weather-sf">
                             <h3>San Francisco</h3>
                             <img src=""/>
@@ -173,7 +173,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         
         <section id="right">
             
-            <div id="events">
+            <div id="events" class="box">
                 <h2>Upcoming Events</h2>
                 
                 <dl>
@@ -182,7 +182,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                 <p>No upcoming events</p>
             </div>
             
-            <div id="pto">
+            <div id="pto" class="box">
                 <h2>Out of the Office</h2>
                 
                 <p>Once authentication is figured out, this will list people out of the office today.</p>

@@ -96,16 +96,17 @@ body {
     line-height: 1.2;
 }
 
-#alert {
-    background-color: rgba(255, 0, 0, 0.5);
-    padding: 0.5em;
-    position: absolute;
-    bottom: 2em;
-    right: 2em;
-    width: 22em;
-    text-align: center;
+/* a few global classes */
+.box {
+    background: -moz-linear-gradient(center bottom , rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.15));
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
+}
+.box h2 {
+    font-family: MetaBold-Roman, 'Meta';
+    font-weight: bold;
+    text-shadow: 2px 2px 1px rgba(255, 0, 0, 0.4);
+    margin-bottom: 1em;
 }
 
 /* Header row */
@@ -123,13 +124,16 @@ header > div {
     display: table-cell;
     vertical-align: top;
 }
+#title,
+#date-time {
+    width: 25%;
+}
 
 header h1 {
+    background: transparent url(../images/dino.png) no-repeat 0.3em 0;
     font-size: 4em;
     font-weight: bold;
     font-family: MetaBold-Roman, 'Meta';
-    background: -moz-linear-gradient(center bottom, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0.5), rgba(255, 0, 0, 0.4));
-    padding: 0.1em 0.3em 0.2em;
     text-align: center;
     text-shadow: 2px 2px 2px #000000;
     -moz-box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
@@ -138,7 +142,16 @@ header h1 {
     -moz-border-radius-bottomright: 0.5em;
     -webkit-border-bottom-left-radius: 0.5em;
     -webkit-border-bottom-right-radius: 0.5em;
-    width: 3.3em;
+    width: 4em;
+}
+header h1 span {
+    display: block;
+    padding: 0.1em 0.3em 0.2em;
+    background: -moz-linear-gradient(center bottom, rgba(255, 0, 0, 0.6), rgba(255, 0, 0, 0.3));
+    -moz-border-radius-bottomleft: 0.5em;
+    -moz-border-radius-bottomright: 0.5em;
+    -webkit-border-bottom-left-radius: 0.5em;
+    -webkit-border-bottom-right-radius: 0.5em;
 }
 #world-clock {
     padding-top: 1.5em;
@@ -151,10 +164,12 @@ header h1 {
 }
 #world-clock li time {
     display: block;
-    font-size: 1.2em;
+    color: #CCCCCC;
+    margin-top: 0.2em;
 }
 #world-clock li span {
-    color: #CCCCCC;
+    border-bottom: 1px dashed #333333;
+    padding-bottom: 0.1em;
 }
 #date-time {
     line-height: 1;
@@ -258,12 +273,10 @@ header h1 {
 }
 #firefox .tweets li {
     clear: left;
-    background-color: rgba(255, 255, 255, 0.1);
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
     padding: 0.5em;
     margin: 1em 0 0;
     min-height: 48px;
+    font-size: 0.9em;
 }
 #firefox .tweets li img {
     float: left;
@@ -271,10 +284,9 @@ header h1 {
     width: 48px;
     height: 48px;
 }
-#firefox .tweets li span {
+#firefox .tweets li a.author {
     display: block;
     margin-bottom: 0.4em;
-    font-size: 0.85em;
     color: #CCCCCC;
 }
 #firefox .tweets li time {
@@ -316,9 +328,6 @@ header h1 {
     text-shadow: none;
 }
 #rotating > div {
-    background-color: rgba(255, 255, 255, 0.1);
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
     padding: 1em;
     vertical-align: top;
     font-size: 0.9em;
@@ -383,15 +392,9 @@ header h1 {
     margin-top: 2em;
 }
 #traffic {
-    background-color: rgba(255, 255, 255, 0.1);
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
     padding: 1em;
     vertical-align: top;
     display: table-cell;
-}
-#traffic h2 {
-    margin-bottom: 1em;
 }
 #traffic-map {
     background: url(../data/traffic.gif) no-repeat scroll -61px -143px transparent;
@@ -419,9 +422,6 @@ header h1 {
     padding-left: 2em;
 }
 #caltrain {
-    background-color: rgba(255, 255, 255, 0.1);
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
     padding: 1em;
     margin-bottom: 2em;
 }
@@ -431,15 +431,17 @@ header h1 {
     font-family: MetaBold-Italic, 'Meta';
     font-family: Arial;
     font-size: 1.2em;
+    text-shadow: none;
 }
 #caltrain h2 .train {
     background-color: #C71B1B;
     -moz-border-radius: 7em;
     -webkit-border-radius: 0.7em;
     padding: 0.4em 0;
+    text-shadow: none;
 }
 #caltrain table {
-    padding: 1em;
+    padding: 0 1em;
     margin: 0 auto;
     width: 100%;
 }
@@ -493,9 +495,6 @@ header h1 {
     color: #C2732B;
 }
 #weather {
-    background-color: rgba(255, 255, 255, 0.1);
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
     padding: 1em;
     text-align: center;
 }
@@ -525,9 +524,6 @@ header h1 {
 
 /* Right */
 #events {
-    background-color: rgba(255, 255, 255, 0.1);
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
     padding: 1em;
     vertical-align: top;
     height: 27em;
@@ -565,9 +561,6 @@ header h1 {
 }
 
 #pto {
-    background-color: rgba(255, 255, 255, 0.1);
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
     padding: 1em;
     vertical-align: top;
 }

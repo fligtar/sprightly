@@ -183,24 +183,24 @@ var sprightly = {
     update_firefox_tweets: function(data) {
         data.reverse();
         $.each(data, function(i, tweet) {
-            // Censor bad words for the office children, pets, and interns.
-            // Yes, I have seen every one of these words in a tweet with "Firefox" in it.
-            tweet.text = tweet.text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[YAY FIREFOX!]');
-            
-            // Banned users
-            // This bot is super annoying
-            if (tweet.author == 'raveranter (raveranter)') return;
-            
-            // Banned content
-            // ow.ly seems to include "Mozilla Firefox" in every tweet. wtf?
-            if (tweet.text.indexOf('http://ow.ly') !== -1) return;
-            
-            // Twitter highlights the OR operator. do not want
-            tweet.text = tweet.text.replace(/<b>OR<\/b>/gi, 'or');
-            
+            // Only add the tweets that are new since last update to the UI push queue
             tweet.dateobj = new Date(tweet.date);
             if (tweet.dateobj > sprightly.last_tweet_date) {
-                // Only add the tweets that are new since last update to the UI push queue
+                // Censor bad words for the office children, pets, and interns.
+                // Yes, I have seen every one of these words in a tweet with "Firefox" in it.
+                tweet.text = tweet.text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[YAY FIREFOX!]');
+            
+                // Banned users
+                // This bot is super annoying
+                if (tweet.author == 'raveranter (raveranter)') return;
+            
+                // Banned content
+                // ow.ly seems to include "Mozilla Firefox" in every tweet. wtf?
+                if (tweet.text.indexOf('http://ow.ly') !== -1) return;
+            
+                // Twitter highlights the OR operator. do not want
+                tweet.text = tweet.text.replace(/<b>OR<\/b>/gi, 'or');
+            
                 sprightly.tweet_queue.push(tweet);
                 sprightly.last_tweet_date = tweet.dateobj;
             }
@@ -222,7 +222,7 @@ var sprightly = {
         for (var i = 0; i < num_tweets; i++) {
             var tweet = sprightly.tweet_queue.shift();
         
-            $('#firefox .tweets ul').prepend('<li class="hidden"><img src="' + tweet.avatar + '" /><span class="author">' + tweet.author + '<time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time></span>' + tweet.text + '</li>').find('.hidden').slideDown();
+            $('#firefox .tweets ul').prepend('<li class="box hidden"><img src="' + tweet.avatar + '" /><a class="author" href="' + tweet.url + '">' + tweet.author + '<time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time></a>' + tweet.text + '</li>').find('.hidden').slideDown();
         }
         
         // Clean up everything but the last 10 tweets
