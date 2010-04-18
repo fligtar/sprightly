@@ -150,12 +150,15 @@ class sprightly {
         
         $ics = dirname(dirname(__FILE__)).'/data/calendar.ics';
         
-        if (!file_exists($ics)) return false;
+        if (file_exists($ics)) {
+            $cal = new iCalReader($ics);
+            
+            $events = $cal->getEvents();
+            $events = $this->filter_events($events);
+        }
+        else
+            $events = array();
         
-        $cal = new iCalReader($ics);
-
-        $events = $cal->getEvents();
-        $events = $this->filter_events($events);
         $events = $this->add_events($events);
         
         usort($events, array('sprightly', 'sort_events'));

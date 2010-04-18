@@ -340,10 +340,10 @@ var sprightly = {
     
     // Updates calendar with new events
     update_calendar: function(events) {
-        if (events.length == 0)
-            $('#events p').show();
-        else
+        if (events.length > 0)
             $('#events p').hide();
+        else
+            $('#events p').show();
         
         $('#events dl').empty();
         
