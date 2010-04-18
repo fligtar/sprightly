@@ -54,7 +54,7 @@ var sprightly = {
         
         sprightly.update_status('and we\'re off!');
         $('#loading-message').fadeOut('normal', function() {
-            $('#content, #clocks').fadeIn();
+            $('#content, #world-clock ul, #date-time div').fadeIn();
         });
     },
     

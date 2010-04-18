@@ -577,7 +577,8 @@ header h1 span {
 
 /* Loading */
 #content,
-#clocks {
+#world-clock ul,
+#date-time div {
     display: none;
 }
 #loading-message {

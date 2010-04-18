@@ -27,7 +27,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             <div id="title">
                 <h1><span>mozilla</span></h1>
             </div>
-        
+            
             <div id="world-clock">
                 <ul>
                     <li class="hide-mv"><span>Mountain View</span><time data-offset="-7"></time></li>
@@ -40,9 +40,11 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             </div>
         
             <div id="date-time">
-                <span id="date"></span>
-                <span id="time"></span>
-                <span id="mfbt">(possibly MFBT)</span>
+                <div class="jquery-annoyance">
+                    <span id="date"></span>
+                    <span id="time"></span>
+                    <span id="mfbt">(possibly MFBT)</span>
+                </div>
             </div>
         </div>
     </header>
