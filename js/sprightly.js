@@ -60,7 +60,6 @@ var sprightly = {
                 $('#addfavorite .loading').show();
                 
                 $.getJSON('lib/favorite.php?id=' + id, function(data) {
-                    console.log(data);
                     $('#addfavorite .loading').hide();
                     
                     // Successfully rewteeted
