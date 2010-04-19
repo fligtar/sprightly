@@ -4,6 +4,7 @@
     from remote sources and writing to JSON files. This should probably
     only be called from the cron scripts.
 */
+include dirname(__FILE__).'/config.php';
 
 class sprightly {
     
@@ -14,11 +15,11 @@ class sprightly {
             'firefox_tweets'
         ),
         '5minutely' => array(
-            'traffic'
+            'traffic',
+            'favorite_tweets'
         ),
         'hourly' => array(
             'amo',
-            'weather',
             'caltrain',
             'calendar'
         )
@@ -82,30 +83,6 @@ class sprightly {
         return $amo;    
     }
     
-    // Gets the current weather from Yahoo! Weather
-    private function weather() {
-        $weather = array();
-        $locales = array(
-            'sf' => 12797128,
-            'mv' => 2487956,
-            'sj' => 2488042
-        );
-        
-        foreach ($locales as $locale => $code) {
-            $xml = $this->load_url('http://weather.yahooapis.com/forecastrss?w='.$code);
-        
-            $data = new SimpleXMLElement($xml, LIBXML_NOCDATA);
-        
-            $description = (string) $data->channel->item->description;
-        
-            preg_match('/<img src="(.+?)"\/><br \/>\s+<b>Current Conditions:<\/b><br \/>\s+(.+?)<BR \/>/', $description, $matches);
-        
-            $weather[$locale] = array('img' => $matches[1], 'conditions' => $matches[2]);
-        }
-        
-        return $weather;
-    }
-    
     // Gets the day's Caltrain schedule from my manually-entered class
     private function caltrain() {
         include dirname(__FILE__).'/caltrain.php';
@@ -131,6 +108,28 @@ class sprightly {
                 'url' => (string) $item->link[0]->attributes()->href,
                 'avatar' => (string) $item->link[1]->attributes()->href,
                 'date' => (string) $item->published
+            );
+        }
+        
+        return $tweets;
+    }
+    
+    // Gets our favorite tweets
+    private function favorite_tweets() {
+        $json = $this->load_url('http://api.twitter.com/1/statuses/retweeted_by_me.json', '', FAVORITES_TWITTER_USER.':'.FAVORITES_TWITTER_PASS);
+        
+        $json = json_decode($json);
+        
+        $tweets = array();
+        
+        foreach ($json as $tweet) {
+            $tweets[] = array(
+                'text' => (string) $tweet->retweeted_status->text,
+                'author' => (string) $tweet->retweeted_status->user->screen_name.' ('.$tweet->retweeted_status->user->name.')',
+                'author_url' => (string) 'http://twitter.com/'.$tweet->retweeted_status->user->screen_name,
+                'url' => (string) 'http://twitter.com/'.$tweet->retweeted_status->user->screen_name.'/statuses/'.$tweet->retweeted_status->id,
+                'avatar' => (string) $tweet->retweeted_status->user->profile_image_url,
+                'date' => (string) $tweet->retweeted_status->created_at
             );
         }
         
@@ -229,19 +228,22 @@ class sprightly {
     }
     
     // curl utility function to fetch a URL and return the output
-    private function load_url($url, $post = '') {
+    public function load_url($url, $post = '', $credentials = '') {
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
 
-        // @TODO remove later
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
         if (!empty($post)) {
             curl_setopt($ch, CURLOPT_POST, 1);
             curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        }
+        
+        if (!empty($credentials)) {
+            curl_setopt($ch, CURLOPT_USERPWD, $credentials);
         }
 
         $response = curl_exec($ch);

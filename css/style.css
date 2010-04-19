@@ -265,40 +265,47 @@ header h1 span {
     top: -2.5em;
     color: #000000;
 }
-#firefox .tweets h2 {
-    font-size: 1.5em;
+.tweets h2 {
+    font-size: 1.2em;
+    text-shadow: 2px 2px 1px rgba(255, 0, 0, 0.4);
 }
-#firefox .tweets .hidden {
+.tweets .hidden {
     display: none;
 }
-#firefox .tweets li {
+.tweets li {
     clear: left;
     padding: 0.5em;
     margin: 1em 0 0;
     min-height: 48px;
     font-size: 0.9em;
 }
-#firefox .tweets li img {
+.tweets li img {
     float: left;
     margin-right: 0.4em;
     width: 48px;
     height: 48px;
 }
-#firefox .tweets li a.author {
+.tweets li span {
     display: block;
     margin-bottom: 0.4em;
     color: #CCCCCC;
 }
-#firefox .tweets li time {
+.tweets li span a {
+    color: #CCCCCC;
+    text-decoration: none;
+}
+.tweets li span span {
     float: right;
+}
+.tweets li time {
     font-style: italic;
     font-family: MetaBook-Italic, 'Meta';
 }
-#firefox .tweets li a {
+.tweets li a {
     text-decoration: none;
     color: #666666;
 }
-#firefox .tweets li b {
+.tweets li b {
     color: #D64203;
     text-decoration: none;
 }
@@ -387,40 +394,62 @@ header h1 span {
     font-size: 1.2em;
 }
 
-#local {
-    display: table-row;
-    margin-top: 2em;
+#favorites {
+    
 }
-#traffic {
-    padding: 1em;
-    vertical-align: top;
-    display: table-cell;
-}
-#traffic-map {
-    background: url(../data/traffic.gif) no-repeat scroll -61px -143px transparent;
-    width: 293px;
-    height: 318px;
+#favorites h2 a {
+    border: 1px solid #CCCCCC;
+    color: #CCCCCC;
+    float: right;
+    font-size: 0.7em;
+    padding: 0.2em;
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
-    margin: 0.5em 0;
+    text-shadow: none;
+    text-decoration: none;
 }
-#traffic-map b {
-    color: red;
-    font-size: 3em;
-    left: 156px;
-    position: relative;
-    top: 206px;
+#favorites p {
+    color: #CCCCCC;
+    font-size: 0.9em;
 }
-#traffic span {
-    font-size: 0.8em;
-    text-align: right;
-    display: block;
-}
-#caltrain-weather {
-    display: table-cell;
+
+/* Right */
+#events {
+    padding: 1em;
     vertical-align: top;
-    padding-left: 2em;
+    margin-bottom: 2em;
 }
+#events dt {
+    margin: 1em 0 0.5em;
+    background-color: rgba(255, 255, 255, 0.2);
+    padding: 0.2em 0.5em;
+    text-shadow: 1px 1px 1px #000000;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+}
+#events dt.today {
+    -moz-box-shadow: 0 0 10px #FFFFFF;
+    -webkit-box-shadow: 0 0 10px #FFFFFF;
+}
+#events dd {
+    margin: 0.5em 0 0.5em 1em;
+}
+#events dd time {
+    margin-right: 1em;
+    color: #CCCCCC;
+}
+#events p {
+    background-color: rgba(255, 255, 255, 0.2);
+    margin: 1em;
+    padding: 0.5em;
+    -moz-border-radius: 0.5em;
+    -webkit-border-radius: 0.5em;
+    text-align: center;
+    font-size: 0.9em;
+    color: #CCCCCC;
+    display: none;
+}
+
 #caltrain {
     padding: 1em;
     margin-bottom: 2em;
@@ -468,7 +497,7 @@ header h1 span {
     font-family: MetaBook-Italic, 'Meta';
 }
 #caltrain td.notrains.nb {
-    border-right: 2px solid rgba(255, 255, 255, 0.2);
+    border-right: 1px solid #333333;
 }
 #caltrain td.time {
     font-size: 1.2em;
@@ -478,7 +507,7 @@ header h1 span {
     font-size: 0.9em;
 }
 #caltrain td.type.nb {
-    border-right: 2px solid rgba(255, 255, 255, 0.2);
+    border-right: 1px solid #333333;
     padding-right: 1.5em;
 }
 #caltrain td.time.sb {
@@ -494,85 +523,29 @@ header h1 span {
 #caltrain .limited {
     color: #C2732B;
 }
-#weather {
+
+#traffic {
     padding: 1em;
-    text-align: center;
 }
-#weather div {
-    background-color: #FFFFFF;
-    padding: 0.2em;
+#traffic-map {
+    background: url(../data/traffic.gif) no-repeat scroll -61px -143px transparent;
+    width: 293px;
+    height: 318px;
     -moz-border-radius: 0.5em;
     -webkit-border-radius: 0.5em;
-    display: inline-block;
-    text-align: center;
-    vertical-align: top;
-    width: 28%;
+    margin: 0.5em auto;
 }
-#weather #weather-mv {
-    margin: 0 0.5em;
+#traffic-map b {
+    color: red;
+    font-size: 3em;
+    left: 156px;
+    position: relative;
+    top: 206px;
 }
-#weather div h3 {
-    color: #333333;
+#traffic span {
     font-size: 0.8em;
-}
-#weather span {
+    text-align: right;
     display: block;
-    margin-top: 0.2em;
-    color: #333333;
-    font-size: 0.8em;
-}
-
-/* Right */
-#events {
-    padding: 1em;
-    vertical-align: top;
-    height: 27em;
-    margin-bottom: 2em;
-}
-#events dt {
-    margin: 1em 0 0.5em;
-    background-color: rgba(255, 255, 255, 0.2);
-    padding: 0.2em 0.5em;
-    text-shadow: 1px 1px 1px #000000;
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-}
-#events dt.today {
-    -moz-box-shadow: 0 0 10px #FFFFFF;
-    -webkit-box-shadow: 0 0 10px #FFFFFF;
-}
-#events dd {
-    margin: 0.5em 0 0.5em 1em;
-}
-#events dd time {
-    margin-right: 1em;
-    color: #CCCCCC;
-}
-#events p {
-    background-color: rgba(255, 255, 255, 0.2);
-    margin: 1em;
-    padding: 0.5em;
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-    text-align: center;
-    font-size: 0.9em;
-    color: #CCCCCC;
-    display: none;
-}
-
-#pto {
-    padding: 1em;
-    vertical-align: top;
-}
-#pto p {
-    background-color: rgba(255, 255, 255, 0.2);
-    margin: 1em;
-    padding: 0.5em;
-    -moz-border-radius: 0.5em;
-    -webkit-border-radius: 0.5em;
-    text-align: center;
-    font-size: 0.9em;
-    color: #CCCCCC;
 }
 
 /* Loading */
@@ -603,16 +576,36 @@ header h1 span {
     margin-top: 0.5em;
 }
 
-#debug {
+/* Add Favorite */
+#addfavorite {
     position: absolute;
-    z-index: 0;
-    top: 0;
-    left: 0;
-    width: 1920px;
-    height: 1080px;
-    border-bottom: 1px solid red;
-    border-right: 1px solid red;
+    left: 30%;
+    top: 25%;
+    width: 40%;
+    z-index: 100;
+    background: -moz-linear-gradient(center bottom , rgba(0, 0, 0, 0.97), rgba(0, 0, 0, 0.97)) repeat scroll 0 0 transparent;
+    border: 5px solid rgba(255, 0, 0, 0.4);
+    padding: 1em;
+    -moz-box-shadow: 0 0 40px #FFFFFF;
+    -webkit-box-shadow: 0 0 40px #FFFFFF;
     display: none;
+}
+#addfavorite .loading,
+#addfavorite .done,
+#addfavorite .error {
+    display: none;
+}
+#addfavorite h1 {
+    font-size: 1.5em;
+}
+#addfavorite h2 {
+    font-size: 1.2em;
+    text-shadow: none;
+    text-align: center;
+}
+#addfavorite p {
+    text-align: center;
+    margin: 1em 0;
 }
 
 /* I'll deal with this later!

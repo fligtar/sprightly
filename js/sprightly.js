@@ -14,6 +14,7 @@ var sprightly = {
     firefox_dp5: [],
     supports_transitions: false,
     tweet_queue: [],
+    tweetcounter: 0,
     caltrain: {},
     loadcount: 0,
     
@@ -36,6 +37,62 @@ var sprightly = {
         window.setInterval(sprightly.refresh_minute, 60000);
         window.setInterval(sprightly.refresh_five_minutes, 60000 * 5);
         window.setInterval(sprightly.refresh_hour, 60000 * 60);
+        
+        // Set up keydown listener
+        $(document).keydown(function(event) {
+            sprightly.keydown(event);
+        });
+    },
+    
+    // Interactive tweet favoriting
+    keydown: function(event) {
+        // If the favorites overlay is already showing, process next action
+        if ($('#addfavorite').is(':visible')) {
+            // User hits enter to confirm
+            if (event.keyCode == 13) {
+                event.preventDefault();
+                
+                // Get tweet id from URL
+                var url = $('#addfavorite .tweets li span a').attr('href');
+                var id = url.substring(url.lastIndexOf('/') + 1);
+                
+                $('#addfavorite .confirm').hide();
+                $('#addfavorite .loading').show();
+                
+                $.getJSON('lib/favorite.php?id=' + id, function(data) {
+                    console.log(data);
+                    $('#addfavorite .loading').hide();
+                    
+                    // Successfully rewteeted
+                    if (data.error == false) {
+                        $('#addfavorite .tweets li').clone().prependTo('#favorites ul').find('.counter').remove();
+                        $('#addfavorite .done').show();
+                        window.setTimeout("$('#addfavorite').fadeOut();", 2000);
+                    }
+                    else {
+                        // Error from Twitter
+                        $('#addfavorite .error h1').text('Twitter Error: ' + data.error);
+                        $('#addfavorite .error').show();
+                        window.setTimeout("$('#addfavorite').fadeOut();", 7000);
+                    }
+                });
+            }
+            else {
+                // User pressed another key to cancel
+                $('#addfavorite').hide();
+            }
+        }
+        else if (event.keyCode >= 48 && event.keyCode <= 57) {
+            // Favorites overlay isn't already showing. If a number was pressed, show it
+            event.preventDefault();
+            
+            var num = event.keyCode - 48;
+            
+            $('#addfavorite .tweets').empty();
+            $('#firefox .tweets .tweet-' + num).clone().appendTo('#addfavorite .tweets');
+            $('#addfavorite .loading, #addfavorite .done, #addfavorite .error').hide();
+            $('#addfavorite .confirm, #addfavorite').show();
+        }
     },
     
     // Updates loading status message
@@ -70,7 +127,9 @@ var sprightly = {
         sprightly.update_world_time();
         sprightly.update_relative_times();
         
-        $.getJSON('data/minutely.txt', function(data) {
+        var currentTime = new Date();
+        
+        $.getJSON('data/minutely.txt?' + currentTime.getTime(), function(data) {
             sprightly.update_firefox_downloads(data.firefox_downloads);
             sprightly.update_firefox_tweets(data.firefox_tweets);
             
@@ -89,6 +148,12 @@ var sprightly = {
         sprightly.update_511();
         sprightly.filter_caltrain();
         
+        var currentTime = new Date();
+        
+        $.getJSON('data/5minutely.txt?' + currentTime.getTime(), function(data) {
+            sprightly.update_favorite_tweets(data.favorite_tweets);
+        });
+        
         // If initial load
         if (splash) {
             sprightly.update_status('loaded transportation goodies');
@@ -100,15 +165,16 @@ var sprightly = {
     refresh_hour: function(splash) {
         sprightly.update_mfbt(); // !important;
         
-        $.getJSON('data/hourly.txt', function(data) {
-            sprightly.update_weather(data.weather);
+        var currentTime = new Date();
+        
+        $.getJSON('data/hourly.txt?' + currentTime.getTime(), function(data) {
             sprightly.update_caltrain(data.caltrain);
             sprightly.update_amo(data.amo);
             sprightly.update_calendar(data.calendar);
             
             // If initial load
             if (splash) {
-                sprightly.update_status('guessed weather and additional stats');
+                sprightly.update_status('guessed additional stats');
                 sprightly.done_loading();
             }
         });
@@ -193,6 +259,7 @@ var sprightly = {
                 // Banned users
                 // This bot is super annoying
                 if (tweet.author == 'raveranter (raveranter)') return;
+                if (tweet.author == 'mozillafavs (Mozilla Favorites)') return;
             
                 // Banned content
                 // ow.ly seems to include "Mozilla Firefox" in every tweet. wtf?
@@ -222,11 +289,25 @@ var sprightly = {
         for (var i = 0; i < num_tweets; i++) {
             var tweet = sprightly.tweet_queue.shift();
         
-            $('#firefox .tweets ul').prepend('<li class="box hidden"><img src="' + tweet.avatar + '" /><a class="author" href="' + tweet.url + '">' + tweet.author + '<time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time></a>' + tweet.text + '</li>').find('.hidden').slideDown();
+            $('#firefox .tweets ul').prepend('<li class="box hidden tweet-' + sprightly.tweetcounter + '" data-tweetid=""><img src="' + tweet.avatar + '" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time><span class="counter">&nbsp;&middot;&nbsp;#' + sprightly.tweetcounter + '</span></span></span>' + tweet.text + '</li>').find('.hidden').slideDown();
+            
+            sprightly.tweetcounter++;
+            if (sprightly.tweetcounter > 9)
+                sprightly.tweetcounter = 0;
         }
         
         // Clean up everything but the last 10 tweets
         $('#firefox .tweets ul li:gt(9)').remove();
+    },
+    
+    // Update favorite tweets
+    update_favorite_tweets: function(data) {
+        $('#favorites ul').empty();
+        data.reverse();
+        
+        $.each(data, function(i, tweet) {
+            $('#favorites ul').prepend('<li class="box"><img src="' + tweet.avatar + '" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(new Date(tweet.date)) + '</time></span></span>' + tweet.text + '</li>');
+        });
     },
     
     // New Caltrain data has arrived. Really, this will only change once a day, but you never know
@@ -321,14 +402,6 @@ var sprightly = {
         
         $('#traffic-map').css('background-image', 'data/traffic.gif?' + currentTime.getTime());
         $('#traffic time').attr('datetime', currentTime).text(date_stuff.time_ago_in_words(currentTime));
-    },
-    
-    // New weather data has arrived. Update the UI
-    update_weather: function(data) {
-        $.each(data, function(city, weather) {
-            $('#weather-' + city + ' img').attr('src', weather.img);
-            $('#weather-' + city + ' span').html(weather.conditions.replace(', ', '<br/>').replace(' F', '&deg; F'));
-        });
     },
     
     // New AMO data has arrived. Update the UI
@@ -450,8 +523,9 @@ var date_stuff = {
 
         if (distance_in_minutes == 0) { return 'less than a minute ago'; }
         if (distance_in_minutes == 1) { return 'a minute ago'; }
-        if (distance_in_minutes < 45) { return distance_in_minutes + ' minutes ago'; }
+        if (distance_in_minutes < 60) { return distance_in_minutes + ' minutes ago'; }
         if (distance_in_minutes < 90) { return 'about 1 hour ago'; }
+        if (distance_in_minutes < 120) { return 'about 2 hours ago'; }
         if (distance_in_minutes < 1440) { return 'about ' + Math.floor(distance_in_minutes / 60) + ' hours ago'; }
         if (distance_in_minutes < 2880) { return '1 day ago'; }
         if (distance_in_minutes < 43200) { return Math.floor(distance_in_minutes / 1440) + ' days ago'; }

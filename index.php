@@ -56,6 +56,38 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         </div>
     </section>
     
+    <section id="addfavorite" class="box">
+        <div class="confirm">
+            <h1>Favorite this tweet?</h1>
+        
+            <ul class="tweets">
+            </ul>
+        
+            <p>Please only favorite fun, interesting tweets. Remember that the user will see that it was favorited by Mozilla HQ.</p>
+        
+            <h2>Press [ENTER] to confirm or any other key to cancel</h2>
+        </div>
+        
+        <div class="loading">
+            <h1>Are you human?</h1>
+            
+            <p>Enter the two words below to prove you're human:<br/><br/>
+            <img src="images/captcha.png"/><br/><br/>
+            <input type="text"/>
+            </p>
+            
+            <h2>Just kidding; your request is processing...</h2>
+        </div>
+        
+        <div class="done">
+            <h1>Success! The selected tweet is now a favorite.</h1>
+        </div>
+        
+        <div class="error">
+            <h1>Error: there was a problem favoriting this tweet. Contact fligtar!</h1>
+        </div>
+    </section>
+    
     <section id="content">
     
         <section id="left">
@@ -78,7 +110,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                 </div>
         
                 <div class="tweets">
-                    <h2>Overheard</h2>
+                    <h2>on Twitter</h2>
                     <ul>
                     </ul>
                 </div>
@@ -120,56 +152,13 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                 
             </div><!-- /#rotating -->
             
-            <div id="local">
+            <div id="favorites" class="tweets">
+                <h2>Our Favorites<a href="http://twitter.com/mozillafavs">follow @mozillafavs</a></h2>
+                <p>See an awesome tweet? Use the keypad to enter its number and preserve it.</p>
                 
-                <div id="traffic" class="box hide-toronto">
-                    <h2>Current Traffic</h2>
-                
-                    <div id="traffic-map"><b>&middot;</b></div>
-                    <span>updated <time datetime="" class="relative"></time></span>
-                </div>
-            
-                <div id="caltrain-weather">
-                
-                    <div id="caltrain" class="box hide-toronto">
-                        <h2>Mountain View <span class="logo">Cal<span class="train">train</span></span></h2>
-                
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th colspan="2"><span>San Francisco</span></th>
-                                    <th colspan="2"><span>San Jos&eacute;</span></th>
-                                </tr>
-                            </thead>
-                    
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
-                    
-                    <div id="weather" class="box">
-                        <div id="weather-sf">
-                            <h3>San Francisco</h3>
-                            <img src=""/>
-                            <span></span>
-                        </div>
-                    
-                        <div id="weather-mv">
-                            <h3>Mountain View</h3>
-                            <img src=""/>
-                            <span></span>
-                        </div>
-                    
-                        <div id="weather-sj">
-                            <h3>San Jos&eacute;</h3>
-                            <img src=""/>
-                            <span></span>
-                        </div>
-                    </div>
-                
-                </div><!-- /#caltrain-weather -->
-            
-            </div><!-- /#local -->
+                <ul>
+                </ul>
+            </div><!-- /#favorites -->
             
         </section><!-- /#middle -->
         
@@ -182,13 +171,30 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                 </dl>
                 
                 <p>No upcoming events</p>
-            </div>
+            </div><!-- /#events -->
             
-            <div id="pto" class="box">
-                <h2>Out of the Office</h2>
-                
-                <p>Once authentication is figured out, this will list people out of the office today.</p>
-            </div>
+            <div id="caltrain" class="box hide-toronto">
+                <h2>Mountain View <span class="logo">Cal<span class="train">train</span></span></h2>
+    
+                <table>
+                    <thead>
+                        <tr>
+                            <th colspan="2"><span>San Francisco</span></th>
+                            <th colspan="2"><span>San Jos&eacute;</span></th>
+                        </tr>
+                    </thead>
+        
+                    <tbody>
+                    </tbody>
+                </table>
+            </div><!-- /#caltrain -->
+            
+            <div id="traffic" class="box hide-toronto">
+                <h2>Current Traffic</h2>
+            
+                <div id="traffic-map"><b>&middot;</b></div>
+                <span>updated <time datetime="" class="relative"></time></span>
+            </div><!-- /#traffic -->
             
         </section><!-- /#right -->
         

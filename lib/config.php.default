@@ -1,0 +1,6 @@
+<?php
+
+define('FAVORITES_TWITTER_USER', '');
+define('FAVORITES_TWITTER_PASS', '');
+
+?>
