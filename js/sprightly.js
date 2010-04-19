@@ -78,8 +78,8 @@ var sprightly = {
                     }
                 });
             }
-            else {
-                // User pressed another key to cancel
+            else if (event.keyCode != 144){
+                // User pressed another key to cancel (other than NumLock)
                 $('#addfavorite').hide();
             }
             
