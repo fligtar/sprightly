@@ -46,6 +46,8 @@ var sprightly = {
     
     // Interactive tweet favoriting
     keydown: function(event) {
+        var showOverlay = false;
+        
         // If the favorites overlay is already showing, process next action
         if ($('#addfavorite').is(':visible')) {
             // User hits enter to confirm
@@ -80,13 +82,27 @@ var sprightly = {
                 // User pressed another key to cancel
                 $('#addfavorite').hide();
             }
+            
+            return;
         }
         else if (event.keyCode >= 48 && event.keyCode <= 57) {
-            // Favorites overlay isn't already showing. If a number was pressed, show it
-            event.preventDefault();
-            
+            // Normal keys
             var num = event.keyCode - 48;
-            
+            showOverlay = true;
+        }
+        else if (event.keyCode >= 96 && event.keyCode <= 105) {
+            // Numpad keys
+            var num = event.keyCode - 96;
+            showOverlay = true;
+        }
+        else if (event.keyCode == 111) {
+            // Numpad keyboard has a / on it that opens find bar
+            event.preventDefault();
+        }
+        
+        // If a number was pressed
+        if (showOverlay) {
+            event.preventDefault();
             $('#addfavorite .tweets').empty();
             $('#firefox .tweets .tweet-' + num).clone().appendTo('#addfavorite .tweets');
             $('#addfavorite .loading, #addfavorite .done, #addfavorite .error').hide();
