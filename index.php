@@ -63,7 +63,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             <ul class="tweets">
             </ul>
         
-            <p>Please only favorite fun, interesting tweets. Remember that the user will see that it was favorited by Mozilla HQ.</p>
+            <p>Please only favorite interesting tweets (good and bad). Remember that the user will see that it was favorited by Mozilla HQ.</p>
         
             <h2>Press [ENTER] to confirm or any other key to cancel</h2>
         </div>

@@ -149,6 +149,10 @@ class sprightly {
         
         $ics = dirname(dirname(__FILE__)).'/data/calendar.ics';
         
+        $file = $this->load_url('http://mail.mozilla.com/home/justin@mozilla.com/moco%20calendar');
+        
+        file_put_contents($ics, $file);
+        
         if (file_exists($ics)) {
             $cal = new iCalReader($ics);
             
