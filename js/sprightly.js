@@ -275,9 +275,7 @@ var sprightly = {
             // Only add the tweets that are new since last update to the UI push queue
             tweet.dateobj = new Date(tweet.date);
             if (tweet.dateobj > sprightly.last_tweet_date) {
-                // Censor bad words for the office children, pets, and interns.
-                // Yes, I have seen every one of these words in a tweet with "Firefox" in it.
-                tweet.text = tweet.text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[YAY FIREFOX!]');
+                tweet.text = sprightly.censor_tweet(tweet.text);
             
                 // Banned users
                 // This bot is super annoying
@@ -295,6 +293,12 @@ var sprightly = {
                 sprightly.last_tweet_date = tweet.dateobj;
             }
         });
+    },
+    
+    // Censor bad words for the office children, pets, and interns.
+    censor_tweet: function(text) {
+        // Yes, I have seen every one of these words in a tweet with "Firefox" in it.
+        return text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[BLEEP!]');
     },
     
     // Add the next tweet to the UI
@@ -329,6 +333,8 @@ var sprightly = {
         data.reverse();
         
         $.each(data, function(i, tweet) {
+            tweet.text = sprightly.censor_tweet(tweet.text);
+            
             $('#favorites ul').prepend('<li class="box"><img src="' + tweet.avatar + '" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(new Date(tweet.date)) + '</time></span></span>' + tweet.text + '</li>');
         });
     },
