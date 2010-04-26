@@ -116,7 +116,7 @@ class sprightly {
     
     // Gets our favorite tweets
     private function favorite_tweets() {
-        $json = $this->load_url('http://api.twitter.com/1/statuses/retweeted_by_me.json', '', FAVORITES_TWITTER_USER.':'.FAVORITES_TWITTER_PASS);
+        $json = $this->load_url('http://api.twitter.com/1/statuses/retweeted_by_me.json?count=10', '', FAVORITES_TWITTER_USER.':'.FAVORITES_TWITTER_PASS);
         
         $json = json_decode($json);
         

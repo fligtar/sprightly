@@ -332,9 +332,9 @@ var sprightly = {
         sprightly.filter_caltrain();
     },
     
-    // Based on the day's schedule and current time, update the table with the next 5 trains
+    // Based on the day's schedule and current time, update the table with the next 3 trains
     filter_caltrain: function() {
-        // Get the 5 next trains for each direction
+        // Get the 3 next trains for each direction
         var schedule = {
             northbound: sprightly.compare_trains(sprightly.caltrain.northbound),
             southbound: sprightly.compare_trains(sprightly.caltrain.southbound)
@@ -342,7 +342,7 @@ var sprightly = {
         
         $('#caltrain tbody').empty();
         
-        for (var i = 0; i < 5; i++) {
+        for (var i = 0; i < 3; i++) {
             var row = '<tr>';
             
             // Check if there are any NB trains at all
@@ -386,16 +386,16 @@ var sprightly = {
         }
     },
     
-    // Given one direction's schedule for the day, find the nearest 5 times
+    // Given one direction's schedule for the day, find the nearest 3 times
     compare_trains: function(schedule) {
         var filtered = [];
         var currentTime = new Date();
         var hours = currentTime.getHours();
         var minutes = currentTime.getMinutes();
         
-        // Get the 5 next trains
+        // Get the 3 next trains
         for (var i in schedule) {
-            if (filtered.length >= 5) break;
+            if (filtered.length >= 3) break;
             
             var train = schedule[i];
             var time = train[0].split(':');
@@ -436,12 +436,20 @@ var sprightly = {
         $('#events dl').empty();
         
         var lastdate = '';
+        var dates = 0;
         
         $.each(events, function(i, event) {
             var time = new Date(event.start);
             var prettydate = date_stuff.get_pretty_date(time);
             
+            // Determine if it's a new day
             if (lastdate != prettydate) {
+                // Temporarily, only show a maximum of 3 dates for space reasons
+                if (dates < 3)
+                    dates++;
+                else
+                    return;
+                
                 if (lastdate == '' && prettydate == date_stuff.get_pretty_date())
                     var extra = ' class="today"';
                 else

@@ -154,7 +154,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             
             <div id="favorites" class="tweets">
                 <h2>Our Favorites<a href="http://twitter.com/mozillafavs">follow @mozillafavs</a></h2>
-                <p>See an awesome tweet? Use the keypad to enter its number and preserve it.</p>
+                <p>See an interesting tweet? Use the keypad to enter its number and preserve it.</p>
                 
                 <ul>
                 </ul>
