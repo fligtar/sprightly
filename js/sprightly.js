@@ -17,6 +17,7 @@ var sprightly = {
     tweetcounter: 0,
     caltrain: {},
     loadcount: 0,
+    lastKey: 0,
     
     // Initialize!
     initialize: function() {
@@ -83,6 +84,7 @@ var sprightly = {
                 $('#addfavorite').hide();
             }
             
+            sprightly.lastKey = event.keyCode;
             return;
         }
         else if (event.keyCode >= 48 && event.keyCode <= 57) {
@@ -95,9 +97,13 @@ var sprightly = {
             var num = event.keyCode - 96;
             showOverlay = true;
         }
-        else if (event.keyCode == 111) {
+        else if (event.keyCode == 111 || event.keyCode == 191) {
             // Numpad keyboard has a / on it that opens find bar
             event.preventDefault();
+            // Instead, let's make this the secret "push twice to refresh" key
+            if (sprightly.lastKey == 111 || sprightly.lastKey == 191) {
+                window.location.reload();
+            }
         }
         
         // If a number was pressed
@@ -108,6 +114,8 @@ var sprightly = {
             $('#addfavorite .loading, #addfavorite .done, #addfavorite .error').hide();
             $('#addfavorite .confirm, #addfavorite').show();
         }
+        
+        sprightly.lastKey = event.keyCode;
     },
     
     // Updates loading status message
@@ -248,7 +256,7 @@ var sprightly = {
         // This is pretty hacky but will be improved soon.
         // "total downloads" ~= 3.6 downloads + a guess based on SpreadFirefox total, sorta kinda
         $('#firefox .downloads .fx36 .count').text(add_commas(sprightly.firefox36_downloads));
-        $('#firefox .downloads .total .count').text(add_commas(1033197939 + sprightly.firefox36_downloads));
+        $('#firefox .downloads .total .count').text(add_commas(836582561 + sprightly.firefox36_downloads));
         
         // On Firefox 3.7+ we use a CSS transition for a cool effect.
         // On other browsers we don't because it's an unnecessary perf hit
