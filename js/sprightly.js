@@ -39,6 +39,9 @@ var sprightly = {
         window.setInterval(sprightly.refresh_five_minutes, 60000 * 5);
         window.setInterval(sprightly.refresh_hour, 60000 * 60);
         
+        // Rotation init
+        sprightly.rotation.init();
+        
         // Set up keydown listener
         $(document).keydown(function(event) {
             sprightly.keydown(event);
@@ -157,7 +160,7 @@ var sprightly = {
             sprightly.update_firefox_tweets(data.firefox_tweets);
             
             // If initial load, also prep some UI
-            if (splash) {
+            if (splash == true) {
                 sprightly.update_firefox_counts();
                 sprightly.next_tweet(true);
                 sprightly.update_status('loaded tweets & deets');
@@ -168,6 +171,10 @@ var sprightly = {
     
     // Called every 5 minutes to refresh data
     refresh_five_minutes: function(splash) {
+        if (splash != true) {
+            sprightly.rotation.nextBox();
+        }
+        
         sprightly.update_511();
         sprightly.filter_caltrain();
         
@@ -178,7 +185,7 @@ var sprightly = {
         });
         
         // If initial load
-        if (splash) {
+        if (splash == true) {
             sprightly.update_status('loaded transportation goodies');
             sprightly.done_loading();
         }
@@ -196,7 +203,7 @@ var sprightly = {
             sprightly.update_calendar(data.calendar);
             
             // If initial load
-            if (splash) {
+            if (splash == true) {
                 sprightly.update_status('guessed additional stats');
                 sprightly.done_loading();
             }
@@ -213,7 +220,10 @@ var sprightly = {
     update_relative_times: function() {
         $('time.relative').each(function(e, t) {
             var time = $(t);
-            time.text(date_stuff.time_ago_in_words_with_parsing(time.attr('datetime')));
+            if (time.hasClass('mins_until'))
+                time.text(date_stuff.mins_until(time.attr('datetime')));
+            else
+                time.text(date_stuff.time_ago_in_words_with_parsing(time.attr('datetime')));
         });
     },
     
@@ -476,8 +486,99 @@ var sprightly = {
             $('#events dl').append('<dd><time>' + date_stuff.get_pretty_time(time) + '</time>' + event.name + '</dd>');
         }); 
         
-    }
+    },
     
+    rotation: {
+        interval: null,
+        
+        // Initialization tasks for the pre-selected box
+        init: function() {
+            var box = $('#rotating .box:eq(0)');
+            
+            var five_mins = new Date;
+            five_mins.setMinutes(five_mins.getMinutes() + 5);
+            $('#rotating .next time').attr('datetime', five_mins).text('5');
+            
+            // Set panel rotation interval for this box's durations
+            var duration = parseInt(box.attr('data-duration'));
+            sprightly.rotation.interval = window.setInterval(sprightly.rotation.nextPanel, duration * 1000);
+        },
+        
+        // Switches from the currentl project box to the next
+        nextBox: function() {
+            // Clear any existing intervals
+            if (sprightly.rotation.interval)
+                window.clearInterval(sprightly.rotation.interval);
+
+            // Determine if there are multiple boxes at all
+            if ($('#rotating .box').size() <= 1)
+                return;
+
+            // Currently selected box
+            var old_box = $('#rotating .box.active');
+
+            // The new box to show
+            var new_box = old_box.next('.box');
+            if (new_box.size() == 0)
+                new_box = $('#rotating .box:eq(0)');
+
+            // The box to show after this one (for label)
+            var next_box = new_box.next('.box');
+            if (next_box.size() == 0)
+                next_box = $('#rotating .box:eq(0)');
+
+            // Reset panels in the new box
+            new_box.find('.active').removeClass('active');
+            new_box.find(':visible').hide();
+            new_box.find('.panel:eq(0), .menu li:eq(0)').addClass('active');
+
+            // Do the transition
+            old_box.fadeOut('normal', function() {
+                new_box.fadeIn().addClass('active');
+                $('#rotating .next span').text(next_box.attr('data-label'));
+                
+                var five_mins = new Date;
+                five_mins.setMinutes(five_mins.getMinutes() + 5);
+                $('#rotating .next time').attr('datetime', five_mins).text('5');
+                
+                // Set panel rotation interval for this box's durations
+                var duration = parseInt(new_box.attr('data-duration'));
+                sprightly.rotation.interval = window.setInterval(sprightly.rotation.nextPanel, duration * 1000);
+
+            }).removeClass('active');
+        },
+        
+        // Switches from the current panel to next within a project box
+        nextPanel: function() {
+            // Get the active project box
+            var box = $('#rotating .box.active');
+            
+            // Make sure there's more than one panel
+            if (box.find('.panel').size() <= 1)
+                return;
+            
+            // Get the active panel
+            var current_panel = box.find('.panel.active');
+            
+            // Switch from current panel to next
+            current_panel.fadeOut('normal', function() {
+                // Get next panel, which may be the first one if at the end
+                var next = current_panel.next('.panel');
+                if (next.size() == 0)
+                    next = box.find('.panel:eq(0)');
+                
+                // Deactivate menu item as well
+                box.find('.menu #' + current_panel.attr('id') + 'm').removeClass('active');
+                
+                // Fade in new panel
+                next.fadeIn().addClass('active');
+                
+                // Activate new menu item
+                box.find('.menu #' + next.attr('id') + 'm').addClass('active');
+                
+            }).removeClass('active');
+        }
+    }
 };
 
 // Adds commas to an integer. I found this on mozilla.com somewhere!
@@ -571,6 +672,17 @@ var date_stuff = {
         if (distance_in_minutes < 1051199) { return 'about 1 year ago'; }
 
         return 'over ' + Math.floor(distance_in_minutes / 525960) + ' years ago';
+    },
+    
+    mins_until: function(date) {
+        var now = new Date;
+        var then = new Date;
+        then.setTime(Date.parse(date));
+        
+        var distance_in_seconds = ((then - now) / 1000);
+        var distance_in_minutes = Math.ceil(distance_in_seconds / 60);
+        
+        return distance_in_minutes;
     },
     
     // mostly from http://articles.techrepublic.com.com/5100-10878_11-6016329.html

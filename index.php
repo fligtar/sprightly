@@ -122,33 +122,83 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         <section id="middle">
             
             <div id="rotating">
-                <span class="featured">Featured Projects<span class="next">next: Support</span></span>
+                <span class="featured">Featured Projects<span class="next">next: <span class="label">Support</span> in <time class="relative mins_until"></time>m</span></span>
                 
-                <div id="amo" class="box">
+                <div id="amo" class="box active" data-label="Add-ons" data-duration="15">
                     
                     <h1><img src="images/addons.png"/><span>Add-ons</span></h1>
                     
-                    <p>The AMO gallery continues to grow, with <strong><span id="amo-public"></span> add-ons and Personas</strong> approved and available for download. Major progress has been made on the review queues, and there are currently <strong><span id="amo-pending"></span> pending updates</strong> to add-ons and <strong><span id="amo-nominated"></span> new add-ons</strong> awaiting Editor review.</p>
-                    
-                    <p>Since their launch last June, <strong><span id="amo-collections"></span> collections have been created</strong> by users, generating <strong><span id="amo-collectiondownloads"></span> add-on downloads</strong> from those collections.</p>
-                    
-                    <p>Rock Your Firefox, our new blog featuring 3 consumer-friendly add-ons every week, continues to entertain its <strong><span>5,000+</span> daily readers</strong> and highlight some of the best ways to customize Firefox.</p>
-                    
-                    <p>The add-ons team is currently kept busy rewriting the site in Django, absorbing GetPersonas.com, helping with the Firefox Add-ons Manager redesign, and planning improvements to a number of features.</p>
-                    
-                    <div id="amo-counts">
+                    <!-- General Stats. inline display:block is required to stop a warping bug. don't ask -->
+                    <div id="amo-1" class="panel active" style="display: block;">
                         <div>
-                            <span id="amo-downloads" class="count"></span>
-                            <span class="label">add-on downloads</span>
+                            <span id="amo-public" class="count"></span>
+                            <span class="label">approved add-ons and Personas</span>
                         </div>
-                    
                         <div>
-                            <span id="amo-adu" class="count"></span>
-                            <span class="label">add-ons in use</span>
+                            <div>
+                                <span id="amo-downloads" class="count"></span>
+                                <span class="label">add-on downloads</span>
+                            </div>
+
+                            <div>
+                                <span id="amo-adu" class="count"></span>
+                                <span class="label">add-ons in use</span>
+                            </div>
                         </div>
                     </div>
                     
+                    <!-- Collections -->
+                    <div id="amo-2" class="panel">
+                    <p>Since their launch last June, <strong><span id="amo-collections"></span> collections have been created</strong> by users, generating <strong><span id="amo-collectiondownloads"></span> add-on downloads</strong> from those collections.</p>
+                    </div>
+                    
+                    <!-- Review Queues -->
+                    <div id="amo-3" class="panel">
+                    <p>Major progress has been made on the review queues, and there are currently <strong><span id="amo-pending"></span> pending updates</strong> to add-ons and <strong><span id="amo-nominated"></span> new add-ons</strong> awaiting Editor review.</p>
+                    </div>
+                    
+                    <!-- RYF -->
+                    <div id="amo-4" class="panel">
+                        <p>Rock Your Firefox, our new blog featuring 3 consumer-friendly add-ons every week, continues to entertain its <strong><span>5,000+</span> daily readers</strong> and highlight some of the best ways to customize Firefox.</p>
+                    </div>
+                    
+                    <!-- Roadmap -->
+                    <div id="amo-5" class="panel">
+                        <p>What the add-ons team is currently working on:</p>
+                        <ul>
+                            <li>rewriting addons.mozilla.org in Django</li>
+                            <li>absorbing GetPersonas.com</li>
+                            <li>helping with the Firefox 4 Add-ons Manager redesign</li>
+                            <li>working on big improvements to core features and tools</li>
+                            <li>planning developer and consumer events</li>
+                            <li>Jetpack, marketplace, and lots more</li>
+                        </ul>
+                    </div>
+                    
+                    <ul class="menu">
+                        <li id="amo-1m" class="active">Overview</li>
+                        <li id="amo-2m">Collections</li>
+                        <li id="amo-3m">Review Queues</li>
+                        <li id="amo-4m">Rock Your Firefox</li>
+                        <li id="amo-5m">Roadmap</li>
+                    </ul>
+                    
                 </div><!-- /#amo -->
+                
+                <div id="sumo" class="box" data-label="Support" data-duration="2">
+
+                    <h1><img src="images/sumo.png"/><span>Support</span></h1>
+
+                    <!-- Test 1 -->
+                    <div id="support-1" class="panel active">
+                        <p>Cheng, give me support data!</p>
+                    </div>
+
+                    <ul class="menu">
+                        <li id="support-1m" class="active">A Plea</li>
+                    </ul>
+
+                </div><!-- /#support -->
                 
             </div><!-- /#rotating -->
             

@@ -334,10 +334,38 @@ header h1 span {
     text-align: center;
     text-shadow: none;
 }
-#rotating > div {
+#rotating .box {
     padding: 1em;
     vertical-align: top;
     font-size: 0.9em;
+    height: 30em;
+    display: none;
+}
+#rotating .box.active {
+    display: block;
+}
+#rotating .panel {
+    display: none;
+    height: 20em;
+    padding: 1em;
+}
+#rotating .panel.active {
+    display: block;
+}
+#rotating .menu {
+    border-top: 1px solid #333333;
+    margin-top: 1em;
+    text-align: center;
+}
+#rotating .menu li {
+    display: inline-block;
+    color: #666666;
+    margin: -1px 1em 0;
+    padding-top: 0.5em;
+}
+#rotating .menu li.active {
+    color: #FFFFFF;
+    border-top: 1px solid #FFFFFF;
 }
 
 #amo h1 {
@@ -359,44 +387,49 @@ header h1 span {
     margin-left: 0.2em;
     text-shadow: 1px 1px 1px #CCCCCC;
 }
-#amo p {
-    margin-bottom: 1em;
-    line-height: 1.5;
-    font-size: 1.2m;
-}
-#amo p span {
-    color: #3A66B0;
-    font-weight: bold;
-    font-family: MetaBold-Roman, 'Meta';
-    font-size: 1.2em;
-}
-#amo p strong {
-    font-weight: bold;
-    font-family: MetaBold-Roman, 'Meta';
-}
-#amo-counts {
-    text-align: center;
-    border-top: 1px solid #333333;
-    margin-top: 1em;
-    padding: 1em 0;
-}
-#amo-counts div {
+#amo .panel div {
     display: inline-block;
     text-align: center;
     width: 45%;
 }
-#amo-counts .count {
+#amo .panel .count {
     display: block;
     font-size: 2em;
 }
-#amo-counts .label {
+#amo .panel .label {
     color: #CCCCCC;
     font-size: 1.2em;
 }
-
-#favorites {
-    
+#amo .panel p {
+    font-size: 1.2em;
 }
+#amo .panel li {
+    font-size: 1.2em;
+    list-style: disc;
+    margin: 0.5em 0 0 3em;
+}
+
+#sumo h1 {
+    position: relative;
+    left: -40px;
+    top: -27px;
+    margin-bottom: -1.5em;
+}
+#sumo h1 img {
+    vertical-align: middle;
+    display: inline;
+}
+#sumo h1 span {
+    color: #3A66B0;
+    font-weight: bold;
+    font-family: MetaBold-Roman, 'Meta';
+    font-size: 3em;
+    vertical-align: middle;
+    margin-left: 0.2em;
+    text-shadow: 1px 1px 1px #CCCCCC;
+}
+
+
 #favorites h2 a {
     border: 1px solid #CCCCCC;
     color: #CCCCCC;
