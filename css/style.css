@@ -400,13 +400,30 @@ header h1 span {
     color: #CCCCCC;
     font-size: 1.2em;
 }
+#amo .panel .stats-container {
+    display: block;
+    width: 100%;
+    margin-bottom: 3em;
+}
 #amo .panel p {
     font-size: 1.2em;
+    margin-bottom: 1em;
+    color: #CCCCCC;
 }
 #amo .panel li {
     font-size: 1.2em;
     list-style: disc;
     margin: 0.5em 0 0 3em;
+}
+#amo .panel .caption {
+    text-align: center;
+}
+#amo .panel h2 {
+    font-size: 1.5em;
+    margin-bottom: 0.5em;
+}
+#amo .panel ul.spaced li {
+    margin-bottom: 2em;
 }
 
 #sumo h1 {
