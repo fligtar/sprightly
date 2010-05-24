@@ -502,17 +502,17 @@ var sprightly = {
             // Set panel rotation interval for this box's durations
             var duration = parseInt(box.attr('data-duration'));
             sprightly.rotation.interval = window.setInterval(sprightly.rotation.nextPanel, duration * 1000);
+            
+            sprightly.debug.log('init: panel interval set to ' + duration + ' * 1000');
         },
         
         // Switches from the currentl project box to the next
         nextBox: function() {
+            sprightly.debug.log('nextBox: called');
+            
             // Clear any existing intervals
             if (sprightly.rotation.interval)
                 window.clearInterval(sprightly.rotation.interval);
-
-            // Determine if there are multiple boxes at all
-            if ($('#rotating .box').size() <= 1)
-                return;
 
             // Currently selected box
             var old_box = $('#rotating .box.active');
@@ -529,7 +529,6 @@ var sprightly = {
 
             // Reset panels in the new box
             new_box.find('.active').removeClass('active');
-            new_box.find(':visible').hide();
             new_box.find('.panel:eq(0), .menu li:eq(0)').addClass('active');
 
             // Do the transition
@@ -544,6 +543,8 @@ var sprightly = {
                 // Set panel rotation interval for this box's durations
                 var duration = parseInt(new_box.attr('data-duration'));
                 sprightly.rotation.interval = window.setInterval(sprightly.rotation.nextPanel, duration * 1000);
+                
+                sprightly.debug.log('nextBox: old_box ' + old_box.attr('id') + ' swapped for new_box ' + new_box.attr('id'));
 
             }).removeClass('active');
         },
@@ -556,6 +557,7 @@ var sprightly = {
             // Make sure there's more than one panel
             if (box.find('.panel').size() <= 1)
                 return;
+            sprightly.debug.log('nextPanel: multiple panels found');
             
             // Get the active panel
             var current_panel = box.find('.panel.active');
@@ -564,8 +566,12 @@ var sprightly = {
             current_panel.fadeOut('normal', function() {
                 // Get next panel, which may be the first one if at the end
                 var next = current_panel.next('.panel');
-                if (next.size() == 0)
+                if (next.size() == 0) {
                     next = box.find('.panel:eq(0)');
+                    sprightly.debug.log('nextPanel: next panel is beginning');
+                }
+                else
+                    sprightly.debug.log('nextPanel: next panel not beginning');
                 
                 // Deactivate menu item as well
                 box.find('.menu #' + current_panel.attr('id') + 'm').removeClass('active');
@@ -576,7 +582,17 @@ var sprightly = {
                 // Activate new menu item
                 box.find('.menu #' + next.attr('id') + 'm').addClass('active');
                 
+                sprightly.debug.log('nextPanel: current_panel ' + current_panel.attr('id') + ' swapped for next ' + next.attr('id'));
+                
             }).removeClass('active');
+        }
+    },
+    
+    debug: {
+        log: function(item) {
+            if (window['console']) {
+                console.log(item);
+            }
         }
     }
 };
