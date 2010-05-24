@@ -265,6 +265,14 @@ header h1 span {
     top: -2.5em;
     color: #000000;
 }
+#firefox .downloads .note {
+    text-align: right;
+    color: #666666;
+    font-size: 0.9em;
+    font-family: MetaBook-Italic, 'Meta';
+    font-style: italic;
+    margin-top: 0.5em;
+}
 .tweets h2 {
     font-size: 1.2em;
     text-shadow: 2px 2px 1px rgba(255, 0, 0, 0.4);

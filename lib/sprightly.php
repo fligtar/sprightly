@@ -11,7 +11,7 @@ class sprightly {
     // Catalog of what reports get run when
     private $reports = array(
         'minutely' => array(
-            'firefox_downloads',
+            //'firefox_downloads',
             'firefox_tweets'
         ),
         '5minutely' => array(

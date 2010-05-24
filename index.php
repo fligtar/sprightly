@@ -99,14 +99,16 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                     <span class="change"></span>
                 
                     <div class="total">
-                        <span class="count"></span>
+                        <span class="count">1,312,797,758</span>
                         <span class="label">total downloads</span>
                     </div>
                 
                     <div class="fx36">
-                        <span class="count"></span>
+                        <span class="count">245,652,441</span>
                         <span class="label">3.6 downloads</span>
                     </div>
+                    
+                    <p class="note">live counts temporarily unavailable due to bad data</p>
                 </div>
         
                 <div class="tweets">
@@ -296,6 +298,6 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
     </section><!-- /#content -->
     
     <script type="text/javascript" src="js/jquery.js"></script>
-    <script type="text/javascript" src="js/sprightly.js"></script>
+    <script type="text/javascript" src="js/sprightly.js?1"></script>
 </body>
 </html>

@@ -143,7 +143,7 @@ var sprightly = {
     
     // Called every 5 seconds to refresh data
     refresh_five_seconds: function() {
-        sprightly.update_firefox_counts();
+        //sprightly.update_firefox_counts();
         sprightly.next_tweet();
     },
     
@@ -156,12 +156,12 @@ var sprightly = {
         var currentTime = new Date();
         
         $.getJSON('data/minutely.txt?' + currentTime.getTime(), function(data) {
-            sprightly.update_firefox_downloads(data.firefox_downloads);
+            //sprightly.update_firefox_downloads(data.firefox_downloads);
             sprightly.update_firefox_tweets(data.firefox_tweets);
             
             // If initial load, also prep some UI
             if (splash == true) {
-                sprightly.update_firefox_counts();
+                //sprightly.update_firefox_counts();
                 sprightly.next_tweet(true);
                 sprightly.update_status('loaded tweets & deets');
                 sprightly.done_loading();
