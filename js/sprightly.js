@@ -40,7 +40,7 @@ var sprightly = {
         window.setInterval(sprightly.refresh_hour, 60000 * 60);
         
         // Rotation init
-        sprightly.rotation.init();
+        //sprightly.rotation.init();
         
         // Set up keydown listener
         $(document).keydown(function(event) {
@@ -172,7 +172,7 @@ var sprightly = {
     // Called every 5 minutes to refresh data
     refresh_five_minutes: function(splash) {
         if (splash != true) {
-            sprightly.rotation.nextBox();
+            //sprightly.rotation.nextBox();
         }
         
         sprightly.update_511();
@@ -222,6 +222,8 @@ var sprightly = {
             var time = $(t);
             if (time.hasClass('mins_until'))
                 time.text(date_stuff.mins_until(time.attr('datetime')));
+            if (time.hasClass('days_until'))
+                time.text(date_stuff.days_until(time.attr('datetime')));
             else
                 time.text(date_stuff.time_ago_in_words_with_parsing(time.attr('datetime')));
         });
@@ -699,6 +701,17 @@ var date_stuff = {
         var distance_in_minutes = Math.ceil(distance_in_seconds / 60);
         
         return distance_in_minutes;
+    },
+    
+    days_until: function(date) {
+        var now = new Date;
+        var then = new Date;
+        then.setTime(Date.parse(date));
+        
+        var distance_in_seconds = ((then - now) / 1000);
+        var distance_in_days = Math.ceil(distance_in_seconds / 86400);
+        
+        return distance_in_days;
     },
     
     // mostly from http://articles.techrepublic.com.com/5100-10878_11-6016329.html

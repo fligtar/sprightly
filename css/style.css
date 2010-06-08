@@ -454,6 +454,48 @@ header h1 span {
     text-shadow: 1px 1px 1px #CCCCCC;
 }
 
+#summit {
+    background: #c6e5f4 url(../images/summit-footer.png) no-repeat bottom center;
+    color: #00593e;
+}
+#summit h1 {
+    position: relative;
+    left: -40px;
+    top: -40px;
+    margin-bottom: -1.5em;
+    float: left;
+}
+#summit h2 {
+    text-shadow: none;
+    float: right;
+    font-size: 5em;
+    margin: 0;
+    position: relative;
+    top: 5px;
+    right: 36px;
+}
+#summit > div {
+    clear: both;
+    padding: 0 1em;
+}
+#summit h3 {
+    font-weight: bold;
+    font-family: MetaBold-Roman, 'Meta';
+    font-size: 1.3em;
+}
+#summit li {
+    list-style: disc;
+    font-size: 1.2em;
+    margin: 0.5em 0 0.5em 1.5em;
+}
+#summit code {
+    font-family: monospace;
+    font-size: 1.3em;
+}
+#summit p {
+    text-align: right;
+    margin-top: 2em;
+}
 
 #favorites h2 a {
     border: 1px solid #CCCCCC;

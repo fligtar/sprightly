@@ -124,9 +124,28 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         <section id="middle">
             
             <div id="rotating">
-                <span class="featured">Featured Projects<!--><span class="next">next: <span class="label">Support</span> in <time class="relative mins_until"></time>m</span>--></span>
+                <?php /*<span class="featured">Featured Projects<!--><span class="next">next: <span class="label">Support</span> in <time class="relative mins_until"></time>m</span>--></span>*/ ?>
                 
-                <div id="amo" class="box active" data-label="Add-ons" data-duration="15">
+                <div id="summit" class="box active" data-label="Summit" data-duration="30">
+
+                    <h1><img src="images/summit-header.png"/></h1>
+                    <h2><time datetime="2010-07-07T00:00:00-07:00" class="relative days_until"></time> days</h2>
+                    
+                    <div>
+                        <h3>Latest News</h3>
+                        
+                        <ul>
+                            <li>All attendees should receive their travel itinerary by Wednesday, June 9th</li>
+                            <li>Register a Breakout Session, Science Fair exhibit, or Lightning Talk before June 15th</li>
+                            <li>Tag your tweets and photos with <code>moz10</code> and join us in <code>#moz10</code> on IRC</li>
+                        </ul>
+                        
+                        <p>Learn more at <u>http://wiki.mozilla.org/Summit2010</u></p>
+                    </div>
+
+                </div>
+                
+                <?php /*<div id="amo" class="box" data-label="Add-ons" data-duration="15">
                     
                     <h1><img src="images/addons.png"/><span>Add-ons</span></h1>
                     
@@ -245,7 +264,9 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                         <li id="support-1m" class="active">A Plea</li>
                     </ul>
 
-                </div>-->
+                </div>--> */?>
+                
+
                 
             </div><!-- /#rotating -->
             
