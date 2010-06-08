@@ -486,7 +486,7 @@ header h1 span {
 #summit li {
     list-style: disc;
     font-size: 1.2em;
-    margin: 0.5em 0 0.5em 1.5em;
+    margin: 0.5em 2em 0.5em 2em;
 }
 #summit code {
     font-family: monospace;
