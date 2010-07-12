@@ -530,7 +530,7 @@ var sprightly = {
                 next_box = $('#rotating .box:eq(0)');
 
             // Reset panels in the new box
-            new_box.find('.active').removeClass('active');
+            new_box.find('.active').removeClass('active').css('display', 'none');
             new_box.find('.panel:eq(0), .menu li:eq(0)').addClass('active');
 
             // Do the transition
