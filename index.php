@@ -104,7 +104,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                     </div>
                 
                     <div class="fx36">
-                        <span class="count">245,652,441</span>
+                        <span class="count">323,871,380</span>
                         <span class="label">3.6 downloads</span>
                     </div>
                     
@@ -164,7 +164,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                         </div>
                         <div class="stats-container">
                             <div>
-                                <span id="amo-downloads-temp" class="count">1,947,652,054</span>
+                                <span id="amo-downloads" class="count"></span>
                                 <span class="label">add-on downloads</span>
                             </div>
 
