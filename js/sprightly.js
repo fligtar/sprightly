@@ -40,7 +40,7 @@ var sprightly = {
         window.setInterval(sprightly.refresh_hour, 60000 * 60);
         
         // Rotation init
-        //sprightly.rotation.init();
+        sprightly.rotation.init();
         
         // Set up keydown listener
         $(document).keydown(function(event) {
@@ -172,7 +172,7 @@ var sprightly = {
     // Called every 5 minutes to refresh data
     refresh_five_minutes: function(splash) {
         if (splash != true) {
-            //sprightly.rotation.nextBox();
+            sprightly.rotation.nextBox();
         }
         
         sprightly.update_511();

@@ -124,9 +124,9 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         <section id="middle">
             
             <div id="rotating">
-                <?php /*<span class="featured">Featured Projects<!--><span class="next">next: <span class="label">Support</span> in <time class="relative mins_until"></time>m</span>--></span>*/ ?>
+                <span class="featured">Featured Projects<!--><span class="next">next: <span class="label">Support</span> in <time class="relative mins_until"></time>m</span>--></span>
                 
-                <div id="summit" class="box active" data-label="Summit" data-duration="30">
+                <?php /*<div id="summit" class="box active" data-label="Summit" data-duration="30">
 
                     <h1><img src="images/summit-header.png"/></h1>
                     <h2><time datetime="2010-07-07T00:00:00-07:00" class="relative days_until"></time> days</h2>
@@ -143,9 +143,9 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                         <p>Learn more at <u>http://wiki.mozilla.org/Summit2010</u></p>
                     </div>
 
-                </div>
+                </div> */?>
                 
-                <?php /*<div id="amo" class="box" data-label="Add-ons" data-duration="15">
+                <div id="amo" class="box active" data-label="Add-ons" data-duration="15">
                     
                     <h1><img src="images/addons.png"/><span>Add-ons</span></h1>
                     
@@ -264,7 +264,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                         <li id="support-1m" class="active">A Plea</li>
                     </ul>
 
-                </div>--> */?>
+                </div>-->
                 
 
                 
