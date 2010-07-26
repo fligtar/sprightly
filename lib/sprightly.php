@@ -11,16 +11,12 @@ class sprightly {
     // Catalog of what reports get run when
     private $reports = array(
         'minutely' => array(
-            //'firefox_downloads',
             'firefox_tweets'
         ),
         '5minutely' => array(
-            'traffic',
             'favorite_tweets'
         ),
         'hourly' => array(
-            'amo',
-            'caltrain',
             'calendar'
         )
     );
@@ -39,57 +35,6 @@ class sprightly {
         print_r($data);
         
         file_put_contents(dirname(dirname(__FILE__)).'/data/'.$type.'.txt', json_encode($data));
-    }
-    
-    // Gets the total Firefox 3.6 downloads
-    private function firefox_downloads() {
-        $json = $this->load_url('http://downloadstats.mozilla.com/data/country_report.json');
-
-        $data = json_decode($json);
-        
-        foreach ($data->countries as $country) {
-            if ($country->code == '**') {
-                $total = array('total' => $country->total, 'rps' => $country->rps, 'sum' => $country->count);
-                break;
-            }
-        }
-        
-        // We only update download counts once every 5 seconds now, so we need to split these up
-        for ($i = 0; $i < 60; $i += 5) {
-            $total['dp5'][] = $total['rps'][$i] + $total['rps'][$i + 1] + $total['rps'][$i + 2] + $total['rps'][$i + 3] + $total['rps'][$i + 4];
-        }
-        unset($total['rps']);
-        
-        return $total;
-    }
-    
-    // Gets the previous day's AMO stats
-    private function amo() {
-        // Pull yesterday's stats because today's will be zero.
-        $xml = $this->load_url('https://services.addons.mozilla.org/en-US/firefox/api/1.2/stats/'.date('Y-m-d', time() - 86400));
-        
-        $data = new SimpleXMLElement($xml);
-        
-        $amo = array(
-            'downloads' => (string) $data->addons->downloads,
-            'adu' => (string) $data->addons->updatepings,
-            'public' => (string) $data->addons->counts->public,
-            'pending' => (string) $data->addons->counts->pending,
-            'nominated' => (string) $data->addons->counts->nominated,
-            'collections' => (string) $data->collections->counts->total,
-            'collectiondownloads' => (string) $data->collections->addon_downloads
-        );
-        
-        return $amo;    
-    }
-    
-    // Gets the day's Caltrain schedule from my manually-entered class
-    private function caltrain() {
-        include dirname(__FILE__).'/caltrain.php';
-        
-        $schedule = date('N') >= 6 ? 'weekends' : 'weekdays';
-        
-        return $caltrain[$schedule];
     }
     
     // Gets the latest tweets that mention firefox, #firefox, @firefox, or mozilla
@@ -134,13 +79,6 @@ class sprightly {
         }
         
         return $tweets;
-    }
-    
-    // Retrieves the live traffic image from 511 and saves it
-    private function traffic() {
-        $image = $this->load_url('http://traffic.511.org/portalmap2.gif?'.time());
-        
-        file_put_contents(dirname(dirname(__FILE__)).'/data/traffic.gif', $image);
     }
     
     // Gets upcoming events from the calendar

@@ -9,12 +9,6 @@ var sprightly = {
         'toronto': 'Toronto'
     },
     office: 'mv',
-    last_tweet_date: null,
-    firefox36_downloads: 0,
-    firefox_dp5: [],
-    supports_transitions: false,
-    tweet_queue: [],
-    tweetcounter: 0,
     caltrain: {},
     loadcount: 0,
     lastKey: 0,
@@ -22,25 +16,16 @@ var sprightly = {
     // Initialize!
     initialize: function() {
         sprightly.office = $('body').attr('data-office');
-        
-        // This only works for Firefox and I... don't care.
-        if (navigator.userAgent.indexOf('3.7') !== -1)
-            sprightly.supports_transitions = true;
 
         // Call refresh functions and indicate that it's their first load
-        sprightly.refresh_five_seconds(true);
         sprightly.refresh_minute(true);
         sprightly.refresh_five_minutes(true);
         sprightly.refresh_hour(true);
 
         // Set up timers to continually refresh as apporpriate
-        window.setInterval(sprightly.refresh_five_seconds, 5000);
         window.setInterval(sprightly.refresh_minute, 60000);
         window.setInterval(sprightly.refresh_five_minutes, 60000 * 5);
         window.setInterval(sprightly.refresh_hour, 60000 * 60);
-        
-        // Rotation init
-        sprightly.rotation.init();
         
         // Set up keydown listener
         $(document).keydown(function(event) {
@@ -141,12 +126,6 @@ var sprightly = {
         });
     },
     
-    // Called every 5 seconds to refresh data
-    refresh_five_seconds: function() {
-        //sprightly.update_firefox_counts();
-        sprightly.next_tweet();
-    },
-    
     // Called every minute to refresh data
     refresh_minute: function(splash) {
         sprightly.update_time();
@@ -156,13 +135,12 @@ var sprightly = {
         var currentTime = new Date();
         
         $.getJSON('data/minutely.txt?' + currentTime.getTime(), function(data) {
-            //sprightly.update_firefox_downloads(data.firefox_downloads);
-            sprightly.update_firefox_tweets(data.firefox_tweets);
+            twitter.enqueue_new_tweets(data.firefox_tweets);
             
             // If initial load, also prep some UI
             if (splash == true) {
                 //sprightly.update_firefox_counts();
-                sprightly.next_tweet(true);
+                twitter.show_next_tweet(true);
                 sprightly.update_status('loaded tweets & deets');
                 sprightly.done_loading();
             }
@@ -171,17 +149,10 @@ var sprightly = {
     
     // Called every 5 minutes to refresh data
     refresh_five_minutes: function(splash) {
-        if (splash != true) {
-            sprightly.rotation.nextBox();
-        }
-        
-        sprightly.update_511();
-        sprightly.filter_caltrain();
-        
         var currentTime = new Date();
         
         $.getJSON('data/5minutely.txt?' + currentTime.getTime(), function(data) {
-            sprightly.update_favorite_tweets(data.favorite_tweets);
+            twitter.update_favorite_tweets(data.favorite_tweets);
         });
         
         // If initial load
@@ -198,8 +169,6 @@ var sprightly = {
         var currentTime = new Date();
         
         $.getJSON('data/hourly.txt?' + currentTime.getTime(), function(data) {
-            sprightly.update_caltrain(data.caltrain);
-            sprightly.update_amo(data.amo);
             sprightly.update_calendar(data.calendar);
             
             // If initial load
@@ -247,208 +216,7 @@ var sprightly = {
         	$('#mfbt').show(); // of course it is!
     },
     
-    // New Firefox download data has arrived. Update our array
-    update_firefox_downloads: function(data) {
-        if (sprightly.firefox36_downloads == 0)
-            sprightly.firefox36_downloads = data.total;
-        
-        sprightly.firefox_dp5 = sprightly.firefox_dp5.concat(data.dp5);
-    },
-    
-    // Every 5 seconds, update the UI counts
-    update_firefox_counts: function() {
-        if (sprightly.firefox_dp5.length == 0)
-            return;
-        
-        var change = sprightly.firefox_dp5.shift();
-        sprightly.firefox36_downloads += change;
-        
-        // This is pretty hacky but will be improved soon.
-        // "total downloads" ~= 3.6 downloads + a guess based on SpreadFirefox total, sorta kinda
-        $('#firefox .downloads .fx36 .count').text(add_commas(sprightly.firefox36_downloads));
-        $('#firefox .downloads .total .count').text(add_commas(836582561 + sprightly.firefox36_downloads));
-        
-        // On Firefox 3.7+ we use a CSS transition for a cool effect.
-        // On other browsers we don't because it's an unnecessary perf hit
-        if (sprightly.supports_transitions) {
-            $('#firefox .downloads .change').append('<span>+' + add_commas(change) + '</span>');
-            $('#firefox .downloads .change span').addClass('go').bind('transitionend', function(e) {
-                $(this).remove();
-            });
-        }
-    },
-    
-    // New tweets have arrived! Let us sort and enqueue them.
-    update_firefox_tweets: function(data) {
-        data.reverse();
-        $.each(data, function(i, tweet) {
-            // Only add the tweets that are new since last update to the UI push queue
-            tweet.dateobj = new Date(tweet.date);
-            if (tweet.dateobj > sprightly.last_tweet_date) {
-                tweet.text = sprightly.censor_tweet(tweet.text);
-            
-                // Banned users
-                // This bot is super annoying
-                if (tweet.author == 'raveranter (raveranter)') return;
-                if (tweet.author == 'mozillafavs (Mozilla Favorites)') return;
-            
-                // Banned content
-                // ow.ly seems to include "Mozilla Firefox" in every tweet. wtf?
-                if (tweet.text.indexOf('http://ow.ly') !== -1) return;
-            
-                // Twitter highlights the OR operator. do not want
-                tweet.text = tweet.text.replace(/<b>OR<\/b>/gi, 'or');
-            
-                sprightly.tweet_queue.push(tweet);
-                sprightly.last_tweet_date = tweet.dateobj;
-            }
-        });
-    },
-    
-    // Censor bad words for the office children, pets, and interns.
-    censor_tweet: function(text) {
-        // Yes, I have seen every one of these words in a tweet with "Firefox" in it.
-        return text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[BLEEP!]');
-    },
-    
-    // Add the next tweet to the UI
-    next_tweet: function(turbo) {
-        if (sprightly.tweet_queue.length == 0)
-            return;
-        
-        // Normally we show one tweet every 5 seconds.
-        // If TURBO is engaged, we add them all (used for initial load)
-        if (turbo)
-            var num_tweets = sprightly.tweet_queue.length;
-        else
-            var num_tweets = 1;
-        
-        for (var i = 0; i < num_tweets; i++) {
-            var tweet = sprightly.tweet_queue.shift();
-        
-            $('#firefox .tweets ul').prepend('<li class="box hidden tweet-' + sprightly.tweetcounter + '" data-tweetid=""><img src="' + tweet.avatar + '" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time><span class="counter">&nbsp;&middot;&nbsp;#' + sprightly.tweetcounter + '</span></span></span>' + tweet.text + '</li>').find('.hidden').slideDown();
-            
-            sprightly.tweetcounter++;
-            if (sprightly.tweetcounter > 9)
-                sprightly.tweetcounter = 0;
-        }
-        
-        // Clean up everything but the last 10 tweets
-        $('#firefox .tweets ul li:gt(9)').remove();
-    },
-    
-    // Update favorite tweets
-    update_favorite_tweets: function(data) {
-        $('#favorites ul').empty();
-        data.reverse();
-        
-        $.each(data, function(i, tweet) {
-            tweet.text = sprightly.censor_tweet(tweet.text);
-            
-            $('#favorites ul').prepend('<li class="box"><img src="' + tweet.avatar + '" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(new Date(tweet.date)) + '</time></span></span>' + tweet.text + '</li>');
-        });
-    },
-    
-    // New Caltrain data has arrived. Really, this will only change once a day, but you never know
-    // when the computer was put to sleep.
-    update_caltrain: function(data) {
-        sprightly.caltrain = data;
-        sprightly.filter_caltrain();
-    },
-    
-    // Based on the day's schedule and current time, update the table with the next 3 trains
-    filter_caltrain: function() {
-        // Get the 3 next trains for each direction
-        var schedule = {
-            northbound: sprightly.compare_trains(sprightly.caltrain.northbound),
-            southbound: sprightly.compare_trains(sprightly.caltrain.southbound)
-        };
-        
-        $('#caltrain tbody').empty();
-        
-        for (var i = 0; i < 3; i++) {
-            var row = '<tr>';
-            
-            // Check if there are any NB trains at all
-            if (i == 1 && schedule.northbound.length == 0) {
-                row += '<td colspan="2" class="nb notrains">No departures</td>';
-            }
-            else {
-                row += '<td class="nb time">';
-                if (schedule.northbound[i]) {
-                    row += schedule.northbound[i][0] + '</td>';
-                
-                    row += '<td class="nb type ' + schedule.northbound[i][1] + '">' + schedule.northbound[i][1];
-                }
-                else
-                    row += '</td><td class="nb type">&nbsp;';
-            
-                row += '</td>';
-            }
-            
-            // Check if there are any SB trains at all
-            if (i == 1 && schedule.southbound.length == 0) {
-                row += '<td colspan="2" class="sb notrains">No departures</td>';
-            }
-            else {
-                row += '<td class="sb time">';
-                
-                if (schedule.southbound[i]) {
-                    row += schedule.southbound[i][0] + '</td>';
-                
-                    row += '<td class="sb type ' + schedule.southbound[i][1] + '">' + schedule.southbound[i][1];
-                }
-                else
-                    row += '</td><td class="sb type">&nbsp;';
-            
-                row += '</td>';
-            }
-            
-            row += '</tr>';
-
-            $('#caltrain tbody').append(row);
-        }
-    },
-    
-    // Given one direction's schedule for the day, find the nearest 3 times
-    compare_trains: function(schedule) {
-        var filtered = [];
-        var currentTime = new Date();
-        var hours = currentTime.getHours();
-        var minutes = currentTime.getMinutes();
-        
-        // Get the 3 next trains
-        for (var i in schedule) {
-            if (filtered.length >= 3) break;
-            
-            var train = schedule[i];
-            var time = train[0].split(':');
-            
-            if (time[0] > hours || (time[0] == hours && time[1] >= minutes)) {
-                // Filter out Saturday-only trains on non-Saturdays
-                if (train[1] == 'saturday' && currentTime.getDay() != 6) continue;
-                
-                filtered.push([date_stuff.format_hours(time[0]) + ':' + time[1], train[1]]);
-            }
-        }
-        
-        return filtered;
-    },
-    
-    // Every 5 minutes, update traffic map with cachebusting from 511.
-    update_511: function() {
-        var currentTime = new Date();
-        
-        $('#traffic-map').css('background-image', 'data/traffic.gif?' + currentTime.getTime());
-        $('#traffic time').attr('datetime', currentTime).text(date_stuff.time_ago_in_words(currentTime));
-    },
-    
-    // New AMO data has arrived. Update the UI
-    update_amo: function(data) {
-        for (var i in data) {
-            $('#amo #amo-' + i).text(add_commas(data[i]));
-        }
-    },
+   
     
     // Updates calendar with new events
     update_calendar: function(events) {
@@ -486,115 +254,88 @@ var sprightly = {
             $('#events dl').append('<dd><time>' + date_stuff.get_pretty_time(time) + '</time>' + event.name + '</dd>');
         }); 
         
-    },
-    
-    rotation: {
-        interval: null,
-        
-        // Initialization tasks for the pre-selected box
-        init: function() {
-            var box = $('#rotating .box:eq(0)');
-            
-            var five_mins = new Date;
-            five_mins.setMinutes(five_mins.getMinutes() + 5);
-            $('#rotating .next time').attr('datetime', five_mins).text('5');
-            
-            // Set panel rotation interval for this box's durations
-            var duration = parseInt(box.attr('data-duration'));
-            sprightly.rotation.interval = window.setInterval(sprightly.rotation.nextPanel, duration * 1000);
-            
-            sprightly.debug.log('init: panel interval set to ' + duration + ' * 1000');
-        },
-        
-        // Switches from the currentl project box to the next
-        nextBox: function() {
-            sprightly.debug.log('nextBox: called');
-            
-            // Clear any existing intervals
-            if (sprightly.rotation.interval)
-                window.clearInterval(sprightly.rotation.interval);
-
-            // Currently selected box
-            var old_box = $('#rotating .box.active');
-
-            // The new box to show
-            var new_box = old_box.next('.box');
-            if (new_box.size() == 0)
-                new_box = $('#rotating .box:eq(0)');
-
-            // The box to show after this one (for label)
-            var next_box = new_box.next('.box');
-            if (next_box.size() == 0)
-                next_box = $('#rotating .box:eq(0)');
-
-            // Reset panels in the new box
-            new_box.find('.active').removeClass('active');
-            new_box.find('.panel:eq(0), .menu li:eq(0)').addClass('active');
-
-            // Do the transition
-            old_box.fadeOut('normal', function() {
-                new_box.fadeIn().addClass('active');
-                $('#rotating .next span').text(next_box.attr('data-label'));
-                
-                var five_mins = new Date;
-                five_mins.setMinutes(five_mins.getMinutes() + 5);
-                $('#rotating .next time').attr('datetime', five_mins).text('5');
-                
-                // Set panel rotation interval for this box's durations
-                var duration = parseInt(new_box.attr('data-duration'));
-                sprightly.rotation.interval = window.setInterval(sprightly.rotation.nextPanel, duration * 1000);
-                
-                sprightly.debug.log('nextBox: old_box ' + old_box.attr('id') + ' swapped for new_box ' + new_box.attr('id'));
-
-            }).removeClass('active');
-        },
-        
-        // Switches from the current panel to next within a project box
-        nextPanel: function() {
-            // Get the active project box
-            var box = $('#rotating .box.active');
-            
-            // Make sure there's more than one panel
-            if (box.find('.panel').size() <= 1)
-                return;
-            sprightly.debug.log('nextPanel: multiple panels found');
-            
-            // Get the active panel
-            var current_panel = box.find('.panel.active');
-            
-            // Switch from current panel to next
-            current_panel.fadeOut('normal', function() {
-                // Get next panel, which may be the first one if at the end
-                var next = current_panel.next('.panel');
-                if (next.size() == 0) {
-                    next = box.find('.panel:eq(0)');
-                    sprightly.debug.log('nextPanel: next panel is beginning');
-                }
-                else
-                    sprightly.debug.log('nextPanel: next panel not beginning');
-                
-                // Deactivate menu item as well
-                box.find('.menu #' + current_panel.attr('id') + 'm').removeClass('active');
-                
-                // Fade in new panel
-                next.fadeIn().addClass('active');
-                
-                // Activate new menu item
-                box.find('.menu #' + next.attr('id') + 'm').addClass('active');
-                
-                sprightly.debug.log('nextPanel: current_panel ' + current_panel.attr('id') + ' swapped for next ' + next.attr('id'));
-                
-            }).removeClass('active');
-        }
-    },
-    
-    debug: {
-        log: function(item) {
-            if (window['console']) {
-                console.log(item);
-            }
-        }
     }
+};
+
+var twitter = {
+    last_tweet_date: null,
+    tweet_queue: [],
+    tweetcounter: 0,
+    
+    // New tweets have arrived! Let us sort and enqueue them.
+    enqueue_new_tweets: function(data) {
+       data.reverse();
+       $.each(data, function(i, tweet) {
+           // Only add the tweets that are new since last update to the UI push queue
+           tweet.dateobj = new Date(tweet.date);
+           if (tweet.dateobj > twitter.last_tweet_date) {
+               tweet.text = twitter.censor_tweet(tweet.text);
+
+               // Banned users
+               // This bot is super annoying
+               if (tweet.author == 'raveranter (raveranter)') return;
+               if (tweet.author == 'mozillafavs (Mozilla Favorites)') return;
+
+               // Banned content
+               // ow.ly seems to include "Mozilla Firefox" in every tweet. wtf?
+               if (tweet.text.indexOf('http://ow.ly') !== -1) return;
+
+               // Twitter highlights the OR operator. do not want
+               tweet.text = tweet.text.replace(/<b>OR<\/b>/gi, 'or');
+
+               twitter.tweet_queue.push(tweet);
+               twitter.last_tweet_date = tweet.dateobj;
+           }
+       });
+       
+       twitter.show_next_tweet();
+   },
+
+   // Censor bad words for the office children, pets, and interns.
+   censor_tweet: function(text) {
+       // Yes, I have seen every one of these words in a tweet with "Firefox" in it.
+       return text.replace(/fuck|shit|cunt|nigger|Justin Bieber/gi, '[BLEEP!]');
+   },
+
+   // Add the next tweet to the UI
+   show_next_tweet: function(turbo) {
+       // Normally we show one tweet every 5 seconds.
+       // If TURBO is engaged, we add them all (used for initial load)
+       if (turbo)
+           var num_tweets = twitter.tweet_queue.length;
+       else
+           var num_tweets = 1;
+
+       for (var i = 0; i < num_tweets; i++) {
+           var tweet = twitter.tweet_queue.shift();
+           
+           var display_tweet_count = (twitter.tweetcounter > 9) ? twitter.tweetcounter : '0' + twitter.tweetcounter;
+           $('#all-tweets .tweets').prepend('<li class="hidden tweet-' + display_tweet_count + '" data-tweetid=""><div><img style="background-image: url(' + tweet.avatar + ');" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time><span class="counter">&nbsp;&middot;&nbsp;#' + display_tweet_count + '</span></span></span><p>' + tweet.text + '</p></li>').find('.hidden').slideDown();
+
+           twitter.tweetcounter++;
+           if (twitter.tweetcounter > 15)
+               twitter.tweetcounter = 0;
+       }
+
+       // Clean up everything but the last 15 tweets
+       $('#all-tweets .tweets li:gt(14)').remove();
+       
+       // If there's another tweet to be added, set a timer
+       if (twitter.tweet_queue.length > 0)
+           window.setTimeout(twitter.show_next_tweet, 5000);
+   },
+
+   // Update favorite tweets
+   update_favorite_tweets: function(data) {
+       $('#favorite-tweets ul').empty();
+       data.reverse();
+
+       $.each(data, function(i, tweet) {
+           tweet.text = twitter.censor_tweet(tweet.text);
+
+           $('#favorite-tweets ul').prepend('<li><img style="background-image: url(' + tweet.avatar + ');" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(new Date(tweet.date)) + '</time></span></span><p>' + tweet.text + '</p></li>');
+       });
+   }
 };
 
 // Adds commas to an integer. I found this on mozilla.com somewhere!
