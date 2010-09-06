@@ -93,26 +93,13 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         <!-- Left column -->
         <section class="column">
             
-            <div id="firefox">
-                <h1><img src="images/firefox-128-noshadow.png"/><span>Firefox</span></h1>
-            
-                <div class="downloads">
-                    <span class="change"></span>
+            <!-- Tweets -->
+            <section id="input" class="panel">
+                <h2>Firefox Input</h2>
                 
-                    <div class="total">
-                        <span class="count">1,312,797,758</span>
-                        <span class="label">total downloads</span>
-                    </div>
-                
-                    <div class="fx36">
-                        <span class="count">245,652,441</span>
-                        <span class="label">3.6 downloads</span>
-                    </div>
-                    
-                    <p class="note">live counts temporarily unavailable due to bad data</p>
-                </div>
-            
-            </div><!-- /#firefox -->
+                <ul class="opinions">
+                </ul>
+            </section>
         
         </section>
         

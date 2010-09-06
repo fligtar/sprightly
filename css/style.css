@@ -224,66 +224,6 @@ header h1 span {
 	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
 }
 
-/* Left Column */
-#firefox h1 {
-    color: #D64203;
-    font-size: 4em;
-    font-weight: bold;
-    font-family: MetaBold-Roman, 'Meta';
-    vertical-align: middle;
-    float: left;
-    margin-top: -0.5em;
-}
-#firefox h1 img {
-    display: inline;
-    vertical-align: middle;
-}
-#firefox h1 span {
-    margin-left: 0.3em;
-    text-shadow: 1px 1px 1px #CCCCCC;
-}
-#firefox .downloads {
-    position: relative;
-    margin: 2em 2em 1em 0;
-}
-#firefox .downloads .total {
-    margin-bottom: 1em;
-}
-#firefox .downloads .count {
-    display: block;
-    text-align: right;
-    font-size: 3em;
-}
-#firefox .downloads .label {
-    display: block;
-    text-align: right;
-    font-size: 2em;
-    color: #CCCCCC;
-}
-#firefox .downloads .change span {
-    position: absolute;
-    color: green;
-    font-size: 2em;
-    right: 0.5em;
-    top: -0.7em;
-}
-#firefox .downloads .change span.go {
-    -moz-transition-property: top, color;
-    -moz-transition-duration: 5s;
-    -webkit-transition-property: top, color;
-    -webkit-transition-duration: 5s;
-    top: -2.5em;
-    color: #000000;
-}
-#firefox .downloads .note {
-    text-align: right;
-    color: #666666;
-    font-size: 0.9em;
-    font-family: MetaBook-Italic, 'Meta';
-    font-style: italic;
-    margin-top: 0.5em;
-}
-
 /* Tweets */
 .tweets h2 {
     font-size: 1.2em;
@@ -304,9 +244,6 @@ header h1 span {
 	-webkit-border-radius: 0.5em;
 	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
 	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
-}
-.tweets li:first-child {
-    margin-top: 0;
 }
 .tweets li img {
     float: left;
@@ -345,7 +282,42 @@ header h1 span {
     text-decoration: none;
 }
 
-
+/* Input */
+.opinions .hidden {
+    display: none;
+}
+.opinions li {
+    clear: left;
+    padding: 0.5em;
+    margin: 0.5em 0 0;
+    min-height: 48px;
+    font-size: 0.9em;
+    display: block;
+	background: -moz-linear-gradient(90deg, #303030, #383838);
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
+}
+.opinions li.positive {
+    background: url(../images/feedback-pos.png) no-repeat;
+}
+.opinions li span {
+    display: block;
+    margin-bottom: 0.4em;
+    color: #CCCCCC;
+}
+.opinions li span a {
+    color: #CCCCCC;
+    text-decoration: none;
+}
+.opinions li span span {
+    float: right;
+}
+.opinions li time {
+    font-style: italic;
+    font-family: MetaBook-Italic, 'Meta';
+}
 
 
 #favorites h2 a {

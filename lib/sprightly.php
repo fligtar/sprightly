@@ -11,7 +11,8 @@ class sprightly {
     // Catalog of what reports get run when
     private $reports = array(
         'minutely' => array(
-            'firefox_tweets'
+            'firefox_tweets',
+            'firefox_input'
         ),
         '5minutely' => array(
             'favorite_tweets'
@@ -35,6 +36,30 @@ class sprightly {
         print_r($data);
         
         file_put_contents(dirname(dirname(__FILE__)).'/data/'.$type.'.txt', json_encode($data));
+    }
+    
+    public function firefox_input() {
+        $xml = $this->load_url('http://input.mozilla.com/en-US/search/atom/?product=firefox');
+        
+        $data = new SimpleXMLElement($xml);
+        $input = array();
+        
+        foreach ($data as $item) {
+            if (empty($item->summary)) continue;
+            
+            if ((string) $item->category[0]->attributes()->term != 'en-US') continue;
+            
+            $input[] = array(
+                'url' => (string) $item->id,
+                'date' => (string) $item->updated,
+                'text' => (string) $item->summary,
+                'version' => str_replace('version:', '', (string) $item->category[2]->attributes()->term),
+                'os' => str_replace('os:', '', (string) $item->category[3]->attributes()->term),
+                'sentiment' => str_replace('sentiment:', '', (string) $item->category[4]->attributes()->term)
+            );
+        }
+        
+        return $input;
     }
     
     // Gets the latest tweets that mention firefox, #firefox, @firefox, or mozilla
@@ -61,9 +86,10 @@ class sprightly {
     
     // Gets our favorite tweets
     private function favorite_tweets() {
-        $json = $this->load_url('http://api.twitter.com/1/statuses/retweeted_by_me.json?count=10', '', FAVORITES_TWITTER_USER.':'.FAVORITES_TWITTER_PASS);
+        require dirname(__FILE__).'/twitteroauth/twitteroauth.php';
+        $connection = new TwitterOAuth(FAVORITES_CONSUMER_KEY, FAVORITES_CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET);
         
-        $json = json_decode($json);
+        $json = $connection->get('statuses/retweeted_by_me.json?count=10');
         
         $tweets = array();
         
@@ -87,7 +113,7 @@ class sprightly {
         
         $ics = dirname(dirname(__FILE__)).'/data/calendar.ics';
         
-        $file = $this->load_url('http://mail.mozilla.com/home/justin@mozilla.com/moco%20calendar');
+        $file = $this->load_url('https://mail.mozilla.com/home/justin@mozilla.com/moco%20calendar');
         
         file_put_contents($ics, $file);
         

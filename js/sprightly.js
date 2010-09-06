@@ -136,11 +136,13 @@ var sprightly = {
         
         $.getJSON('data/minutely.txt?' + currentTime.getTime(), function(data) {
             twitter.enqueue_new_tweets(data.firefox_tweets);
+            input.enqueue_new_opinions(data.firefox_input);
             
             // If initial load, also prep some UI
             if (splash == true) {
                 //sprightly.update_firefox_counts();
                 twitter.show_next_tweet(true);
+                input.show_next_opinion(true);
                 sprightly.update_status('loaded tweets & deets');
                 sprightly.done_loading();
             }
@@ -335,6 +337,49 @@ var twitter = {
 
            $('#favorite-tweets ul').prepend('<li><img style="background-image: url(' + tweet.avatar + ');" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(new Date(tweet.date)) + '</time></span></span><p>' + tweet.text + '</p></li>');
        });
+   }
+};
+
+var input = {
+    last_opinion_date: null,
+    opinion_queue: [],
+    
+    // New opinions have arrived! Let us sort and enqueue them.
+    enqueue_new_opinions: function(data) {
+       data.reverse();
+       $.each(data, function(i, opinion) {
+           // Only add the opinions that are new since last update to the UI push queue
+           opinion.dateobj = new Date(opinion.date);
+           if (opinion.dateobj > input.last_opinion_date) {
+               input.opinion_queue.push(opinion);
+               input.last_opinion_date = opinion.dateobj;
+           }
+       });
+       
+       input.show_next_opinion();
+   },
+   
+   // Add the next opinion to the UI
+   show_next_opinion: function(turbo) {
+       // Normally we show one opinion every 5 seconds.
+       // If TURBO is engaged, we add them all (used for initial load)
+       if (turbo)
+           var num_opinions = input.opinion_queue.length;
+       else
+           var num_opinions = 1;
+
+       for (var i = 0; i < num_opinions; i++) {
+           var opinion = input.opinion_queue.shift();
+           
+           $('#input .opinions').prepend('<li class="hidden positive"><div><p>' + opinion.text + '</p><span>' + opinion.version + ' / ' + opinion.os + '<time datetime="' + opinion.date + '" class="relative">' + date_stuff.time_ago_in_words(opinion.dateobj) + '</time></span></li>').find('.hidden').slideDown();
+       }
+
+       // Clean up everything but the last 15 opinions
+       $('#input .opinions li:gt(14)').remove();
+       
+       // If there's another opinion to be added, set a timer
+       if (input.opinion_queue.length > 0)
+           window.setTimeout(input.show_next_opinion, 5000);
    }
 };
 

@@ -5,10 +5,12 @@
 */
 
 require dirname(__FILE__).'/sprightly.php';
+require dirname(__FILE__).'/twitteroauth/twitteroauth.php';
+$connection = new TwitterOAuth(FAVORITES_CONSUMER_KEY, FAVORITES_CONSUMER_SECRET, OAUTH_TOKEN, OAUTH_TOKEN_SECRET);
 
 $id = $_GET['id'];
 
-$response = sprightly::load_url('http://api.twitter.com/1/statuses/retweet/'.$id.'.xml', 'id='.$id, FAVORITES_TWITTER_USER.':'.FAVORITES_TWITTER_PASS);
+$response = $connection->post('statuses/retweet/'.$id.'.xml', array('id' => $id);
 
 $data = new SimpleXMLElement($response);
 
