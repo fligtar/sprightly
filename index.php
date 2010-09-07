@@ -56,7 +56,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         </div>
     </section>
     
-    <section id="addfavorite" class="box">
+    <section id="add-favorite" class="box">
         <div class="confirm">
             <h1>Favorite this tweet?</h1>
         
@@ -108,7 +108,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             
             <!-- Tweets -->
             <section id="all-tweets" class="panel">
-                <h2>Twitter Stream</h2>
+                <h2>Twitter Mentions</h2>
                 
                 <ul class="tweets">
                 </ul>
@@ -131,7 +131,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             
             <!-- Favorite Tweets -->
             <section id="favorite-tweets" class="panel">
-                <h2>Our Favorites<a href="http://twitter.com/mozillafavs">follow @mozillafavs</a></h2>
+                <h2>Favorite Tweets<a href="http://twitter.com/mozillafavs">follow @mozillafavs</a></h2>
                 <p>See an interesting tweet? Use the keypad to enter its number and preserve it.</p>
                 
                 <ul class="tweets">

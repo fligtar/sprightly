@@ -10,9 +10,7 @@ $connection = new TwitterOAuth(FAVORITES_CONSUMER_KEY, FAVORITES_CONSUMER_SECRET
 
 $id = $_GET['id'];
 
-$response = $connection->post('statuses/retweet/'.$id.'.xml', array('id' => $id);
-
-$data = new SimpleXMLElement($response);
+$data = $connection->post('statuses/retweet/'.$id);
 
 if (!empty($data->error)) {
     $json['error'] = (string) $data->error;

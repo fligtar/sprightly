@@ -11,7 +11,8 @@ var sprightly = {
     office: 'mv',
     caltrain: {},
     loadcount: 0,
-    lastKey: 0,
+    lastKey: -1,
+    lastNumericKey: -1,
     
     // Initialize!
     initialize: function() {
@@ -38,38 +39,38 @@ var sprightly = {
         var showOverlay = false;
         
         // If the favorites overlay is already showing, process next action
-        if ($('#addfavorite').is(':visible')) {
+        if ($('#add-favorite').is(':visible')) {
             // User hits enter to confirm
             if (event.keyCode == 13) {
                 event.preventDefault();
                 
                 // Get tweet id from URL
-                var url = $('#addfavorite .tweets li span a').attr('href');
+                var url = $('#add-favorite .tweets li span a').attr('href');
                 var id = url.substring(url.lastIndexOf('/') + 1);
                 
-                $('#addfavorite .confirm').hide();
-                $('#addfavorite .loading').show();
+                $('#add-favorite .confirm').hide();
+                $('#add-favorite .loading').show();
                 
                 $.getJSON('lib/favorite.php?id=' + id, function(data) {
-                    $('#addfavorite .loading').hide();
+                    $('#add-favorite .loading').hide();
                     
                     // Successfully rewteeted
                     if (data.error == false) {
-                        $('#addfavorite .tweets li').clone().prependTo('#favorites ul').find('.counter').remove();
-                        $('#addfavorite .done').show();
-                        window.setTimeout("$('#addfavorite').fadeOut();", 2000);
+                        $('#add-favorite .tweets li').clone().prependTo('#favorite-tweets ul').find('.counter').remove();
+                        $('#add-favorite .done').show();
+                        window.setTimeout("$('#add-favorite').fadeOut();", 2000);
                     }
                     else {
                         // Error from Twitter
-                        $('#addfavorite .error h1').text('Twitter Error: ' + data.error);
-                        $('#addfavorite .error').show();
-                        window.setTimeout("$('#addfavorite').fadeOut();", 7000);
+                        $('#add-favorite .error h1').text('Twitter Error: ' + data.error);
+                        $('#add-favorite .error').show();
+                        window.setTimeout("$('#add-favorite').fadeOut();", 7000);
                     }
                 });
             }
             else if (event.keyCode != 144){
                 // User pressed another key to cancel (other than NumLock)
-                $('#addfavorite').hide();
+                $('#add-favorite').hide();
             }
             
             sprightly.lastKey = event.keyCode;
@@ -96,11 +97,21 @@ var sprightly = {
         
         // If a number was pressed
         if (showOverlay) {
-            event.preventDefault();
-            $('#addfavorite .tweets').empty();
-            $('#firefox .tweets .tweet-' + num).clone().appendTo('#addfavorite .tweets');
-            $('#addfavorite .loading, #addfavorite .done, #addfavorite .error').hide();
-            $('#addfavorite .confirm, #addfavorite').show();
+            // Check if this key + last key make a valid combination
+            if ($('#all-tweets .tweet-' + sprightly.lastNumericKey + '' + num).size() > 0) {
+                event.preventDefault();
+                $('#add-favorite .tweets').empty();
+                $('#all-tweets .tweet-' + sprightly.lastNumericKey + '' + num).clone().appendTo('#add-favorite .tweets');
+                $('#add-favorite .loading, #add-favorite .done, #add-favorite .error').hide();
+                $('#add-favorite .confirm, #add-favorite').show();
+                sprightly.lastNumericKey = -1;
+            }
+            else {
+                sprightly.lastNumericKey = num;
+            }
+        }
+        else {
+            sprightly.lastNumericKey = -1;
         }
         
         sprightly.lastKey = event.keyCode;
@@ -301,9 +312,12 @@ var twitter = {
 
    // Add the next tweet to the UI
    show_next_tweet: function(turbo) {
+       // Make sure there's something in the queue to show
+       if (twitter.tweet_queue.length == 0) return;
+       
        // Normally we show one tweet every 5 seconds.
        // If TURBO is engaged, we add them all (used for initial load)
-       if (turbo)
+       if (turbo == true)
            var num_tweets = twitter.tweet_queue.length;
        else
            var num_tweets = 1;
@@ -337,6 +351,9 @@ var twitter = {
 
            $('#favorite-tweets ul').prepend('<li><img style="background-image: url(' + tweet.avatar + ');" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(new Date(tweet.date)) + '</time></span></span><p>' + tweet.text + '</p></li>');
        });
+       
+       // Clean up everything but the last 15 tweets
+       $('#favorite-tweets .tweets li:gt(11)').remove();
    }
 };
 
@@ -361,9 +378,12 @@ var input = {
    
    // Add the next opinion to the UI
    show_next_opinion: function(turbo) {
+       // Make sure there's something in the queue to show
+       if (input.opinion_queue.length == 0) return;
+       
        // Normally we show one opinion every 5 seconds.
        // If TURBO is engaged, we add them all (used for initial load)
-       if (turbo)
+       if (turbo == true)
            var num_opinions = input.opinion_queue.length;
        else
            var num_opinions = 1;
@@ -371,7 +391,7 @@ var input = {
        for (var i = 0; i < num_opinions; i++) {
            var opinion = input.opinion_queue.shift();
            
-           $('#input .opinions').prepend('<li class="hidden positive"><div><p>' + opinion.text + '</p><span>' + opinion.version + ' / ' + opinion.os + '<time datetime="' + opinion.date + '" class="relative">' + date_stuff.time_ago_in_words(opinion.dateobj) + '</time></span></li>').find('.hidden').slideDown();
+           $('#input .opinions').prepend('<li class="hidden ' + opinion.sentiment + '"><div><p>' + opinion.text + '</p><span>fx ' + opinion.version + ' / ' + opinion.os + '<span><time datetime="' + opinion.date + '" class="relative">' + date_stuff.time_ago_in_words(opinion.dateobj) + '</time></span></span></li>').find('.hidden').slideDown();
        }
 
        // Clean up everything but the last 15 opinions

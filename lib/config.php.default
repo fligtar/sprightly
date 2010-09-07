@@ -1,6 +1,9 @@
 <?php
 
-define('FAVORITES_TWITTER_USER', '');
-define('FAVORITES_TWITTER_PASS', '');
+define('FAVORITES_CONSUMER_KEY', '');
+define('FAVORITES_CONSUMER_SECRET', '');
+
+define('OAUTH_TOKEN', '');
+define('OAUTH_TOKEN_SECRET', '');
 
 ?>

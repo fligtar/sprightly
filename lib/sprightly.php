@@ -39,15 +39,14 @@ class sprightly {
     }
     
     public function firefox_input() {
-        $xml = $this->load_url('http://input.mozilla.com/en-US/search/atom/?product=firefox');
-        
+        $xml = $this->load_url('http://input.mozilla.com/en-US/search/atom/?product=firefox&nocache-'.time());
         $data = new SimpleXMLElement($xml);
         $input = array();
         
         foreach ($data as $item) {
             if (empty($item->summary)) continue;
             
-            if ((string) $item->category[0]->attributes()->term != 'en-US') continue;
+            if ((string) $item->category[0]->attributes()->term != 'locale:en-US') continue;
             
             $input[] = array(
                 'url' => (string) $item->id,
