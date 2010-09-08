@@ -36,6 +36,9 @@ var sprightly = {
     
     // Interactive tweet favoriting
     keydown: function(event) {
+        // we don't care about numLock
+        if (event.keyCode == 144) return;
+        
         var showOverlay = false;
         
         // If the favorites overlay is already showing, process next action
@@ -68,8 +71,8 @@ var sprightly = {
                     }
                 });
             }
-            else if (event.keyCode != 144){
-                // User pressed another key to cancel (other than NumLock)
+            else {
+                // User pressed another key to cancel
                 $('#add-favorite').hide();
             }
             
