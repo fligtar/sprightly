@@ -250,6 +250,10 @@ var sprightly = {
             var time = new Date(event.start);
             var prettydate = date_stuff.get_pretty_date(time);
             
+            if (event.name.indexOf('Interview') != -1) {
+                return;
+            }
+
             // Determine if it's a new day
             if (lastdate != prettydate) {
                 // Temporarily, only show a maximum of 3 dates for space reasons

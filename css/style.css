@@ -239,11 +239,14 @@ header h1 span {
 	-moz-box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
 	-webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.5);
 }
-.opinions li.positive {
+.opinions li.praise {
     background: -moz-linear-gradient(90deg, rgba(15, 84, 61, 0.3), rgba(15, 84, 61, 0.6));
 }
-.opinions li.negative {
+.opinions li.issue {
     background: -moz-linear-gradient(90deg, rgba(84, 15, 15, 0.3), rgba(84, 15, 15, 0.6));
+}
+.opinions li.suggestion {
+    background: -moz-linear-gradient(90deg, rgba(241, 220, 40, 0.3), rgba(241, 220, 40, 0.6));
 }
 .opinions li div > span {
     display: block;
