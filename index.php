@@ -103,7 +103,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
             
             <!-- Tweets -->
             <section id="caltrain-tweets" class="panel">
-                <h2>(mozilla|firefox) + caltrain</h2>
+                <h2>(mozilla|firefox) + (caltrain|billboard)</h2>
                 
                 <ul class="tweets">
                 </ul>

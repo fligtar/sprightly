@@ -86,7 +86,7 @@ class sprightly {
     
     // Gets the latest tweets that mention firefox or mozilla + caltrain
     private function firefox_caltrain() {
-        $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=firefox+OR+mozilla+caltrain');
+        $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=firefox+OR+mozilla+caltrain+OR+billboard');
         
         $data = new SimpleXMLElement($xml);
         $tweets = array();
