@@ -40,7 +40,7 @@ class sprightly {
     }
     
     public function firefox_input() {
-        $xml = $this->load_url('http://input.mozilla.com/en-US/search/atom/?product=firefox&nocache-'.time());
+        $xml = $this->load_url('http://input.mozilla.com/en-US/beta/search/atom?nocache-'.time());
         $data = new SimpleXMLElement($xml);
         $input = array();
         
