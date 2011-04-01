@@ -22,7 +22,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
 
 <body class="<?php echo $office; ?>" data-office="<?php echo $office; ?>">
     <div id="debug"></div>
-    <!--><header>
+    <!--<header>
         <div>
             <div id="title">
                 <h1><span>mozilla</span></h1>
@@ -93,11 +93,19 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
         <!-- Left column -->
         <section class="column">
             
-            <!-- Tweets -->
-            <section id="input" class="panel">
+            <!-- Input -->
+            <!--<section id="input" class="panel">
                 <h2>Firefox Input</h2>
                 
                 <ul class="opinions">
+                </ul>
+            </section>-->
+            
+            <!-- Tweets -->
+            <section id="caltrain-tweets" class="panel">
+                <h2>(mozilla|firefox) + caltrain</h2>
+                
+                <ul class="tweets">
                 </ul>
             </section>
         

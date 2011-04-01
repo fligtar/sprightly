@@ -11,11 +11,12 @@ class sprightly {
     // Catalog of what reports get run when
     private $reports = array(
         'minutely' => array(
-            'firefox_tweets',
-            'firefox_input'
+            'firefox_tweets'
+            //'firefox_input'
         ),
         '5minutely' => array(
-            'favorite_tweets'
+            'favorite_tweets',
+            'firefox_caltrain'
         ),
         'hourly' => array(
             'calendar'
@@ -64,6 +65,28 @@ class sprightly {
     // Gets the latest tweets that mention firefox, #firefox, @firefox, or mozilla
     private function firefox_tweets() {
         $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=%40firefox+OR+%23firefox+OR+firefox+OR+mozilla');
+        
+        $data = new SimpleXMLElement($xml);
+        $tweets = array();
+        
+        foreach ($data as $item) {
+            if (empty($item->content)) continue;
+            $tweets[] = array(
+                'text' => (string) $item->content,
+                'author' => (string) $item->author->name,
+                'author_url' => (string) $item->author->uri,
+                'url' => (string) $item->link[0]->attributes()->href,
+                'avatar' => (string) $item->link[1]->attributes()->href,
+                'date' => (string) $item->published
+            );
+        }
+        
+        return $tweets;
+    }
+    
+    // Gets the latest tweets that mention firefox or mozilla + caltrain
+    private function firefox_caltrain() {
+        $xml = $this->load_url('http://search.twitter.com/search.atom?lang=en&q=firefox+OR+mozilla+caltrain');
         
         $data = new SimpleXMLElement($xml);
         $tweets = array();

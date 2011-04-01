@@ -150,13 +150,13 @@ var sprightly = {
         
         $.getJSON('data/minutely.txt?' + currentTime.getTime(), function(data) {
             twitter.enqueue_new_tweets(data.firefox_tweets);
-            input.enqueue_new_opinions(data.firefox_input);
+            //input.enqueue_new_opinions(data.firefox_input);
             
             // If initial load, also prep some UI
             if (splash == true) {
                 //sprightly.update_firefox_counts();
                 twitter.show_next_tweet(true);
-                input.show_next_opinion(true);
+                //input.show_next_opinion(true);
                 sprightly.update_status('loaded tweets & deets');
                 sprightly.done_loading();
             }
@@ -168,11 +168,13 @@ var sprightly = {
         var currentTime = new Date();
         
         $.getJSON('data/5minutely.txt?' + currentTime.getTime(), function(data) {
+            twitter_caltrain.enqueue_new_tweets(data.firefox_caltrain);
             twitter.update_favorite_tweets(data.favorite_tweets);
         });
         
         // If initial load
         if (splash == true) {
+            twitter_caltrain.show_next_tweet(true);
             sprightly.update_status('loaded transportation goodies');
             sprightly.done_loading();
         }
@@ -361,6 +363,60 @@ var twitter = {
        
        // Clean up everything but the last 15 tweets
        $('#favorite-tweets .tweets li:gt(11)').remove();
+   }
+};
+
+var twitter_caltrain = {
+    last_tweet_date: null,
+    tweet_queue: [],
+    tweetcounter: 0,
+    
+    // New tweets have arrived! Let us sort and enqueue them.
+    enqueue_new_tweets: function(data) {
+       data.reverse();
+       $.each(data, function(i, tweet) {
+           // Only add the tweets that are new since last update to the UI push queue
+           tweet.dateobj = new Date(tweet.date);
+           if (tweet.dateobj > twitter_caltrain.last_tweet_date) {
+               // Twitter highlights the OR operator. do not want
+               tweet.text = tweet.text.replace(/<b>OR<\/b>/gi, 'or');
+
+               twitter_caltrain.tweet_queue.push(tweet);
+               twitter_caltrain.last_tweet_date = tweet.dateobj;
+           }
+       });
+       
+       twitter_caltrain.show_next_tweet();
+   },
+
+   // Add the next tweet to the UI
+   show_next_tweet: function(turbo) {
+       // Make sure there's something in the queue to show
+       if (twitter_caltrain.tweet_queue.length == 0) return;
+       
+       // Normally we show one tweet every 5 seconds.
+       // If TURBO is engaged, we add them all (used for initial load)
+       if (turbo == true)
+           var num_tweets = twitter_caltrain.tweet_queue.length;
+       else
+           var num_tweets = 1;
+
+       for (var i = 0; i < num_tweets; i++) {
+           var tweet = twitter_caltrain.tweet_queue.shift();
+           
+           $('#caltrain-tweets .tweets').prepend('<li class="hidden" data-tweetid=""><div><img style="background-image: url(' + tweet.avatar + ');" /><span><a href="' + tweet.url + '">' + tweet.author + '</a><span><time datetime="' + tweet.date + '" class="relative">' + date_stuff.time_ago_in_words(tweet.dateobj) + '</time></span></span><p>' + tweet.text + '</p></li>').find('.hidden').slideDown();
+
+           twitter_caltrain.tweetcounter++;
+           if (twitter_caltrain.tweetcounter > 15)
+               twitter_caltrain.tweetcounter = 0;
+       }
+
+       // Clean up everything but the last 15 tweets
+       $('#caltrain-tweets .tweets li:gt(14)').remove();
+       
+       // If there's another tweet to be added, set a timer
+       if (twitter_caltrain.tweet_queue.length > 0)
+           window.setTimeout(twitter_caltrain.show_next_tweet, 5000);
    }
 };
 
