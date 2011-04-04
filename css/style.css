@@ -272,6 +272,9 @@ header h1 span {
     color: #C0DFEC;
     text-shadow: 2px 2px 1px #000000;
 }
+#favorite-tweets {
+    margin-top: 1em;
+}
 .tweets .hidden {
     display: none;
 }
@@ -328,7 +331,6 @@ header h1 span {
 #events {
     padding: 1em;
     vertical-align: top;
-    margin-bottom: 2em;
 }
 #events dt {
     margin: 1em 0 0.5em;
@@ -348,6 +350,10 @@ header h1 span {
 #events dd time {
     margin-right: 1em;
     color: #CCCCCC;
+}
+#events dd span {
+    color: #CCCCCC;
+    font-size: 10px;
 }
 #events p {
     background-color: rgba(255, 255, 255, 0.2);

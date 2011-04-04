@@ -108,6 +108,15 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                 <ul class="tweets">
                 </ul>
             </section>
+            
+            <!-- Favorite Tweets -->
+            <section id="favorite-tweets" class="panel">
+                <h2>Favorite Tweets<a href="http://twitter.com/mozillafavs">follow @mozillafavs</a></h2>
+                <p>See an interesting tweet? Use the keypad to enter its number and preserve it.</p>
+                
+                <ul class="tweets">
+                </ul>
+            </section>
         
         </section>
         
@@ -135,15 +144,6 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
                 </dl>
                 
                 <p>No upcoming events</p>
-            </section>
-            
-            <!-- Favorite Tweets -->
-            <section id="favorite-tweets" class="panel">
-                <h2>Favorite Tweets<a href="http://twitter.com/mozillafavs">follow @mozillafavs</a></h2>
-                <p>See an interesting tweet? Use the keypad to enter its number and preserve it.</p>
-                
-                <ul class="tweets">
-                </ul>
             </section>
             
         </section><!-- /#right -->

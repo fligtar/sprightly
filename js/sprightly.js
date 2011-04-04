@@ -259,7 +259,7 @@ var sprightly = {
             // Determine if it's a new day
             if (lastdate != prettydate) {
                 // Temporarily, only show a maximum of 3 dates for space reasons
-                if (dates < 3)
+                if (dates < 1)
                     dates++;
                 else
                     return;
@@ -273,7 +273,7 @@ var sprightly = {
                 lastdate = prettydate;
             }
             
-            $('#events dl').append('<dd><time>' + date_stuff.get_pretty_time(time) + '</time>' + event.name + '</dd>');
+            $('#events dl').append('<dd><time>' + date_stuff.get_pretty_time(time) + '</time>' + event.name + ' <span>' + event.location + '</span></dd>');
         }); 
         
     }
@@ -412,7 +412,7 @@ var twitter_caltrain = {
        }
 
        // Clean up everything but the last 15 tweets
-       $('#caltrain-tweets .tweets li:gt(14)').remove();
+       $('#caltrain-tweets .tweets li:gt(4)').remove();
        
        // If there's another tweet to be added, set a timer
        if (twitter_caltrain.tweet_queue.length > 0)

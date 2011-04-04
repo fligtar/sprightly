@@ -135,7 +135,8 @@ class sprightly {
         
         $ics = dirname(dirname(__FILE__)).'/data/calendar.ics';
         
-        $file = $this->load_url('https://mail.mozilla.com/home/justin@mozilla.com/moco%20calendar');
+        //$file = $this->load_url('https://mail.mozilla.com/home/justin@mozilla.com/moco%20calendar');
+        $file = $this->load_url('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/All-Hands%20Event');
         
         file_put_contents($ics, $file);
         
@@ -148,7 +149,7 @@ class sprightly {
         else
             $events = array();
         
-        $events = $this->add_events($events);
+        //$events = $this->add_events($events);
         
         usort($events, array('sprightly', 'sort_events'));
         
@@ -186,9 +187,13 @@ class sprightly {
             if ($start < $weekstart && $end > $weekend)
                 $include = true;
             
+            $event['SUMMARY'] = str_replace('\,', ',', $event['SUMMARY']);
+            $event['SUMMARY'] = str_replace('\;', ';', $event['SUMMARY']);
+            
             if ($include == true) {
                 $filtered[] = array(
                     'name' => $event['SUMMARY'],
+                    'location' => !empty($event['LOCATION']) ? $event['LOCATION'] : '',
                     'start' => date('Y-m-d\TH:i:sP', $start),
                     'end' => date('Y-m-d\TH:i:sP', $end)
                 );
