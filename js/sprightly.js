@@ -150,13 +150,13 @@ var sprightly = {
         
         $.getJSON('data/minutely.txt?' + currentTime.getTime(), function(data) {
             twitter.enqueue_new_tweets(data.firefox_tweets);
-            //input.enqueue_new_opinions(data.firefox_input);
+            input.enqueue_new_opinions(data.firefox_input);
             
             // If initial load, also prep some UI
             if (splash == true) {
                 //sprightly.update_firefox_counts();
                 twitter.show_next_tweet(true);
-                //input.show_next_opinion(true);
+                input.show_next_opinion(true);
                 sprightly.update_status('loaded tweets & deets');
                 sprightly.done_loading();
             }
@@ -168,13 +168,13 @@ var sprightly = {
         var currentTime = new Date();
         
         $.getJSON('data/5minutely.txt?' + currentTime.getTime(), function(data) {
-            twitter_caltrain.enqueue_new_tweets(data.firefox_caltrain);
+            //twitter_caltrain.enqueue_new_tweets(data.firefox_caltrain);
             twitter.update_favorite_tweets(data.favorite_tweets);
         });
         
         // If initial load
         if (splash == true) {
-            twitter_caltrain.show_next_tweet(true);
+            //twitter_caltrain.show_next_tweet(true);
             sprightly.update_status('loaded transportation goodies');
             sprightly.done_loading();
         }

@@ -11,12 +11,12 @@ class sprightly {
     // Catalog of what reports get run when
     private $reports = array(
         'minutely' => array(
-            'firefox_tweets'
-            //'firefox_input'
+            'firefox_tweets',
+            'firefox_input'
         ),
         '5minutely' => array(
-            'favorite_tweets',
-            'firefox_caltrain'
+            'favorite_tweets'
+            //'firefox_caltrain'
         ),
         'hourly' => array(
             'calendar'
@@ -40,7 +40,7 @@ class sprightly {
     }
     
     public function firefox_input() {
-        $xml = $this->load_url('http://input.mozilla.com/en-US/beta/search/atom?nocache-'.time());
+        $xml = $this->load_url('http://input.mozilla.com/en-US/search/atom?product=firefox&version=--&nocache-'.time());
         $data = new SimpleXMLElement($xml);
         $input = array();
         
@@ -53,8 +53,8 @@ class sprightly {
                 'url' => (string) $item->id,
                 'date' => (string) $item->updated,
                 'text' => (string) $item->summary,
-                'version' => str_replace('version:', '', (string) $item->category[2]->attributes()->term),
-                'os' => str_replace('os:', '', (string) $item->category[3]->attributes()->term),
+                'version' => str_replace('version:', '', (string) $item->category[3]->attributes()->term),
+                'os' => str_replace('platform:', '', (string) $item->category[1]->attributes()->term),
                 'sentiment' => str_replace('sentiment:', '', (string) $item->category[4]->attributes()->term)
             );
         }
@@ -135,8 +135,8 @@ class sprightly {
         
         $ics = dirname(dirname(__FILE__)).'/data/calendar.ics';
         
-        //$file = $this->load_url('https://mail.mozilla.com/home/justin@mozilla.com/moco%20calendar');
-        $file = $this->load_url('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/All-Hands%20Event');
+        $file = $this->load_url('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/MoCo.ics');
+        //$file = $this->load_url('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/All-Hands%20Event');
         
         file_put_contents($ics, $file);
         
@@ -149,7 +149,7 @@ class sprightly {
         else
             $events = array();
         
-        //$events = $this->add_events($events);
+        $events = $this->add_events($events);
         
         usort($events, array('sprightly', 'sort_events'));
         
