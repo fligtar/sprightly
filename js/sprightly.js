@@ -458,7 +458,7 @@ var input = {
        }
 
        // Clean up everything but the last 17 opinions
-       $('#input .opinions li:gt(20)').remove();
+       $('#input .opinions li:gt(16)').remove();
        
        // If there's another opinion to be added, set a timer
        if (input.opinion_queue.length > 0)
