@@ -362,7 +362,7 @@ var twitter = {
        });
        
        // Clean up everything but the last 15 tweets
-       $('#favorite-tweets .tweets li:gt(10)').remove();
+       $('#favorite-tweets .tweets li:gt(11)').remove();
    }
 };
 
@@ -458,7 +458,7 @@ var input = {
        }
 
        // Clean up everything but the last 17 opinions
-       $('#input .opinions li:gt(17)').remove();
+       $('#input .opinions li:gt(20)').remove();
        
        // If there's another opinion to be added, set a timer
        if (input.opinion_queue.length > 0)
