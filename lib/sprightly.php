@@ -160,6 +160,10 @@ class sprightly {
     private function filter_events($events) {
         $filtered = array();
         
+        // Find start and end times for week
+        $weekstart = strtotime('today');
+        $weekend = strtotime('+6 days');
+        
         // Look for events that start or end during the week or contain days in the week
         foreach ($events as $event) {
             // Find start and end times
@@ -171,10 +175,6 @@ class sprightly {
                 $start = strtotime($event['DTSTART;VALUE=DATE']);
             if (!empty($event['DTEND;VALUE=DATE']))
                 $end = strtotime($event['DTEND;VALUE=DATE']);
-            
-            // Find start and end times for week
-            $weekstart = strtotime('today');
-            $weekend = strtotime('+6 days');
             
             $include = false;
             // Event ends this week
