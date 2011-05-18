@@ -245,7 +245,7 @@ header h1 span {
 .opinions li.issue {
     background: -moz-linear-gradient(90deg, rgba(84, 15, 15, 0.3), rgba(84, 15, 15, 0.6));
 }
-.opinions li.suggestion {
+.opinions li.idea {
     background: -moz-linear-gradient(90deg, rgba(241, 220, 40, 0.3), rgba(241, 220, 40, 0.6));
 }
 .opinions li div > span {
