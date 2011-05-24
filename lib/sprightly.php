@@ -70,7 +70,10 @@ class sprightly {
         $tweets = array();
         
         foreach ($data as $item) {
-            if (empty($item->content)) continue;
+            if (empty($item->content) ||
+                !preg_match("/(firefox|mozilla)/i", $item->content))
+                continue;
+
             $tweets[] = array(
                 'text' => (string) $item->content,
                 'author' => (string) $item->author->name,
