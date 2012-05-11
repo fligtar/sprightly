@@ -16,6 +16,7 @@ $office = !empty($_GET['office']) && in_array($_GET['office'], $offices) ? $_GET
 
 <head>
     <title>sprightly</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" href="css/style.css" type="text/css" />
     <link rel="shortcut icon" type="image/png" href="images/favicon.ico" />
 </head>
