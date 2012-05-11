@@ -40,7 +40,7 @@ class sprightly {
     }
     
     public function firefox_input() {
-        $xml = $this->load_url('http://input.mozilla.com/en-US/search/atom?product=firefox&version=--&nocache-'.time());
+        $xml = $this->load_url('https://input.mozilla.org/en-US/search/atom?product=firefox&version=--&nocache-'.time());
         $data = new SimpleXMLElement($xml);
         $input = array();
         
@@ -135,30 +135,38 @@ class sprightly {
     // Gets upcoming events from the calendar
     private function calendar() {
         require dirname(__FILE__).'/ical.php';
-        
-        $ics = dirname(dirname(__FILE__)).'/data/calendar.ics';
-        
-        $file = $this->load_url('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/MoCo.ics');
-        //$file = $this->load_url('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/All-Hands%20Event');
-        
-        file_put_contents($ics, $file);
-        
-        if (file_exists($ics)) {
-            $cal = new iCalReader($ics);
-            
-            $events = $cal->getEvents();
-            $events = $this->filter_events($events);
-        }
-        else
-            $events = array();
-        
+
+        $events = array();
+
+        $events += $this->fetch_calendar_events('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/MoCo.ics');
+        //$events += $this->fetch_calendar_events('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/All-Hands%20Event');
+        $events += $this->fetch_calendar_events('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/MoCo%20Brown%20Bags.ics');
+        $events += $this->fetch_calendar_events('https://mail.mozilla.com/home/mozillacalendar@mozilla.com/Public%20Brown%20Bags.ics');
+
         $events = $this->add_events($events);
         
         usort($events, array('sprightly', 'sort_events'));
         
         return $events;
     }
-    
+
+    private function fetch_calendar_events($url) {
+        $ics = dirname(dirname(__FILE__)).'/data/calendar.ics';
+        $file = $this->load_url($url);
+
+        file_put_contents($ics, $file);
+
+        if (file_exists($ics)) {
+            $cal = new iCalReader($ics);
+
+            $events = $cal->getEvents();
+            $events = $this->filter_events($events);
+        }
+        else
+            $events = array();
+        return $events;
+    }
+
     // Filter events down to those this week
     private function filter_events($events) {
         $filtered = array();
@@ -232,7 +240,8 @@ class sprightly {
         curl_setopt($ch, CURLOPT_URL, $url);
 
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 5);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
 
         if (!empty($post)) {
