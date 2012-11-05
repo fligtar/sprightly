@@ -52,7 +52,7 @@ class sprightly {
             $input[] = array(
                 'url' => (string) $item->id,
                 'date' => (string) $item->updated,
-                'text' => (string) $item->summary,
+                'text' => htmlspecialchars((string) $item->summary),
                 'version' => str_replace('version:', '', (string) $item->category[3]->attributes()->term),
                 'os' => str_replace('platform:', '', (string) $item->category[1]->attributes()->term),
                 'sentiment' => str_replace('sentiment:', '', (string) $item->category[4]->attributes()->term)
@@ -75,7 +75,7 @@ class sprightly {
                 continue;
 
             $tweets[] = array(
-                'text' => (string) $item->content,
+                'text' => htmlspecialchars((string) $item->content),
                 'author' => (string) $item->author->name,
                 'author_url' => (string) $item->author->uri,
                 'url' => (string) $item->link[0]->attributes()->href,
@@ -97,7 +97,7 @@ class sprightly {
         foreach ($data as $item) {
             if (empty($item->content)) continue;
             $tweets[] = array(
-                'text' => (string) $item->content,
+                'text' => htmlspecialchars((string) $item->content),
                 'author' => (string) $item->author->name,
                 'author_url' => (string) $item->author->uri,
                 'url' => (string) $item->link[0]->attributes()->href,
@@ -120,7 +120,7 @@ class sprightly {
         
         foreach ($json as $tweet) {
             $tweets[] = array(
-                'text' => (string) $tweet->retweeted_status->text,
+                'text' => htmlspecialchars((string) $tweet->retweeted_status->text),
                 'author' => (string) $tweet->retweeted_status->user->screen_name.' ('.$tweet->retweeted_status->user->name.')',
                 'author_url' => (string) 'http://twitter.com/'.$tweet->retweeted_status->user->screen_name,
                 'url' => (string) 'http://twitter.com/'.$tweet->retweeted_status->user->screen_name.'/statuses/'.$tweet->retweeted_status->id,
